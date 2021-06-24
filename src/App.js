@@ -1,7 +1,8 @@
 import React, { Suspense, lazy } from "react";
 import "./styles/App.scss";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
-
+import Login from './Components/Login/Login'
+import Register from './Components/Login/Register'
 import { GlobalCartContextProvider } from "./context/CartContext";
 import { ToastProvider } from "react-toast-notifications";
 import loadingIcon from "./assets/images/dashboardloader3.gif";
@@ -25,7 +26,9 @@ function App() {
             }
           >
             <Switch>
-              <Route exact path="/" component={Homepage} />
+            <Route exact path="/" component={Login} />
+            <Route exact path="/register" component={Register} />
+              <Route exact path="/home" component={Homepage} />
               <Route exact path="/shop" component={Shopping} />
               <Route exact path="/search" component={SearchProducts} />
               <Route exact path="/cart" component={Cart} />

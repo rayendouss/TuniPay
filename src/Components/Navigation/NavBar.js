@@ -38,7 +38,7 @@ export default function NavBar() {
 
             <ul className="navigation-list">
               <li>
-                <Link to="/">
+                <Link to="/home">
                 Home
                 </Link>
                 {/* <a href="/">Home</a>     */}
