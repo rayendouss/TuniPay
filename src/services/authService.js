@@ -16,7 +16,17 @@ const AuthService = {
        })
     },
     register:(data) =>{
-        
+        return API.post("/signup",data)
+        .then((res)=>{
+         console.log(res)
+            //API.default.headers["Authorization"]=`TuniPay ${res.token}`
+       return res
+         })
+        .catch(err => {
+      
+            console.log("auth error",err)
+            throw err
+        })
     },
     logout:() =>{
         

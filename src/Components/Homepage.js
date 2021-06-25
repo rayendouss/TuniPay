@@ -1,6 +1,6 @@
 import React, { Suspense } from "react";
 import "../styles/Homepage.scss";
-
+import { useSelector } from "react-redux";
 
 
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -15,18 +15,20 @@ const TopBanner = React.lazy(() => import("./Navigation/TopBanner"));
 const HeroText = React.lazy(() => import("./Navigation/HeroText"));
 
 export default function () {
-  return (
+  const user=useSelector(state=>state.authReducer.user)
+    return (
     <div>
       <Suspense
         fallback={
           <img src={loadingIcon} alt="loading" className="loadingIcon" />
         }
       >
+       
         <TopBanner />
         <NavBar />
-
+      
         <HeroText />
-
+        <p> welcome {user.name } </p>
         <SecondaryIntro />
 
         <ProductCategories />

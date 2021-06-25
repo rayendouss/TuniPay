@@ -6,6 +6,7 @@ import Register from './Components/Login/Register'
 import { GlobalCartContextProvider } from "./context/CartContext";
 import { ToastProvider } from "react-toast-notifications";
 import loadingIcon from "./assets/images/dashboardloader3.gif";
+import ProtectedRoute from "./Components/Router/ProtectedRoute";
 const Homepage = lazy(() => import("./Components/Homepage"));
 const Shopping = lazy(() => import("./Components/Shopping"));
 const Cart = lazy(() => import("./Components/Cart/Cart"));
@@ -14,7 +15,7 @@ const Delivery = lazy(()=>import("./Components/Delivery/Delivery"))
 
 const SearchProducts = lazy(() => import("./Components/SearchProducts"));
 const PageNotFound = lazy(() => import("./Components/PageNotFound"));
-///aaaaaaaaaaaaa
+
 function App() {
   return (
     <GlobalCartContextProvider>
@@ -28,7 +29,7 @@ function App() {
             <Switch>
             <Route exact path="/" component={Login} />
             <Route exact path="/register" component={Register} />
-              <Route exact path="/home" component={Homepage} />
+              <ProtectedRoute exact path="/home" component={Homepage} />
               <Route exact path="/shop" component={Shopping} />
               <Route exact path="/search" component={SearchProducts} />
               <Route exact path="/cart" component={Cart} />
