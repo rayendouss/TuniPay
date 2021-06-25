@@ -1,11 +1,11 @@
-import React, { Suspense } from "react";
+import React, { Suspense ,useEffect} from "react";
 import "../styles/Homepage.scss";
-import { useSelector } from "react-redux";
+import { useSelector,useDispatch } from "react-redux";
 
 
 import "bootstrap/dist/css/bootstrap.min.css";
 import loadingIcon from "../assets/images/dashboardloader3.gif";
-
+import { fetchPosts } from "../store/actions/post";
 const NavBar = React.lazy(() => import("./Navigation/NavBar"));
 const Footer = React.lazy(() => import("./Navigation/Footer"));
 const SecondaryIntro = React.lazy(() => import("./Intro/SecondaryIntro"));
@@ -16,6 +16,12 @@ const HeroText = React.lazy(() => import("./Navigation/HeroText"));
 
 export default function () {
   const user=useSelector(state=>state.authReducer.user)
+
+   const dispatch = useDispatch()
+
+   useEffect(()=>{
+     dispatch(fetchPosts()).then(res => console.log(res))
+   },[dispatch])
     return (
     <div>
       <Suspense

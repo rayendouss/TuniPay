@@ -5,8 +5,10 @@ const AuthService = {
         
        return API.post("/signin",data)
        .then((res)=>{
-        console.log(res)
-           //API.default.headers["Authorization"]=`TuniPay ${res.token}`
+        console.log(res.data.user)
+      
+        localStorage.setItem('user',JSON.stringify(res.data.user))
+        localStorage.setItem('token',res.data.token)
       return res
         })
        .catch(err => {
@@ -30,7 +32,16 @@ const AuthService = {
     },
     logout:() =>{
         
+    API.default.headers["Authorization"]=''
+    localStorage.removeItem('user')
+    localStorage.removeItem('token')
     }
+}
+const setHeadersAndStorage= ({user,token})=>
+{
+    API.default.headers["Authorization"]=`TuniPay ${token}`
+localStorage.setItem('user',user)
+localStorage.setItem('token',token)
 }
 
 export default AuthService

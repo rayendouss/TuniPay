@@ -1,9 +1,9 @@
 import {LOGIN,REGISTER} from '../store/actions/auth'
 
 const initialState = {
-    user:{},
-    token:"",
-    isLoggedIn:false
+    user:JSON.parse(localStorage.getItem('user')) || {},
+    token:localStorage.getItem('token')|| "",
+    isLoggedIn:(localStorage.getItem('user')) ? true : false
 }
 
 const authReducer = (state=initialState,action)=>{
