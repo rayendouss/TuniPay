@@ -1,18 +1,26 @@
-import React, { useContext } from "react";
+import React, { useContext,useState } from "react";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import "../styles/PopularProducts.scss";
+import { useSelector,useDispatch,connect } from "react-redux";
 
-import PopularProductData from "../data/PopularProducts.json";
 import { faShoppingBasket, faEye } from "@fortawesome/free-solid-svg-icons";
-
+import { fetchPosts } from "../store/actions/post";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Link } from "react-router-dom";
 import { GlobalCartContext } from "../context/CartContext";
 import { useToasts } from "react-toast-notifications";
-
-export default function PopularProducts() {
+ function PopularProducts({user,fetchPosts}) {
+     
+  const [PopularProductData,setPopularProductData]=useState([])
+  fetchPosts()
+ 
+  .then(res=>{
+   
+      setPopularProductData(res.posts)
+      console.log(PopularProductData)
+  })
   const { addToast } = useToasts();
   const { addItemTocart } = useContext(GlobalCartContext);
 
@@ -42,69 +50,50 @@ export default function PopularProducts() {
 
   const data = PopularProductData.map((product) => {
     return (
-      <div className="popular-product" key={product.id}>
-        <div className="card-product">
-          <img
-            src={require("../assets/products/allproducts/" +
-              product.product_image)}
-            alt={product.product_image}
-          />
+      <div className="popular-product" key={product._id}>
+      <div className="card-product">
+        <img
+          src={product.photo}
+          alt={product.photo}
+        />
 
-          <div className="card-product-extra-info">
-            <div className="card-product-icon">
-              <span
-                className="card-product-cart-icon add-to-cart-icon"
-                onClick={() => handleAddToCart(product)}
+        <div className="card-product-extra-info">
+          <div className="card-product-icon">
+            <span
+              className="card-product-cart-icon add-to-cart-icon"
+             
+            >
+              <FontAwesomeIcon icon={faShoppingBasket} />
+            </span>
+
+            <span>
+              <Link
+                className="card-product-cart-icon"
+                to={`/catalog/item/${product.id}/${product.productname}`}
               >
-                <FontAwesomeIcon icon={faShoppingBasket} />
-              </span>
-
-              <span>
-                <Link
-                  className="card-product-cart-icon"
-                  to={`/catalog/item/${product.id}/${product.productname}`}
-                >
-                  <FontAwesomeIcon icon={faEye} />
-                </Link>
-              </span>
-            </div>
-
-            <h4>{product.productname}</h4>
-
-            {product.discount > 0 ? (
-              <h2>
-                <span className="product-price-after-discount">
-                  {new Intl.NumberFormat("en-US", {
-                    style: "currency",
-                    currency: "ZAR",
-                  }).format(
-                    product.price - (product.price * product.discount) / 100
-                  )}
-                </span>{" "}
-                <span className="product-price-before-discount">
-                  {new Intl.NumberFormat("en-US", {
-                    style: "currency",
-                    currency: "ZAR",
-                  }).format(product.price)}
-                </span>{" "}
-                <span className="product-discount-rate">
-                  -{product.discount}%{" "}
-                </span>
-              </h2>
-            ) : (
-              <h2>
-                {" "}
-                <span className="product-price-whit-no-discount">
-                  {new Intl.NumberFormat("en-US", {
-                    style: "currency",
-                    currency: "ZAR",
-                  }).format(product.price)}
-                </span>
-              </h2>
-            )}
+                <FontAwesomeIcon icon={faEye} />
+              </Link>
+            </span>
           </div>
+
+          <h4>{product.title}</h4>
+
+         
+            <h2>
+              <span className="product-price-after-discount">
+              
+                 { product.price} 
+                
+              </span>{" "}
+            
+              <span className="product-discount-rate">
+              <div className="bannerStockLevel">{product.quantite} piéces</div>
+              </span>
+            </h2>
+     
         </div>
       </div>
+    </div>
     );
   });
   const settings = {
@@ -112,7 +101,7 @@ export default function PopularProducts() {
     infinite: true,
     speed: 500,
     slidesToShow: 3,
-    slidesToScroll: 1,
+    slidesToScroll:3,
     initialSlide: 0,
 
     lazyLoad: true,
@@ -154,3 +143,16 @@ export default function PopularProducts() {
     </div>
   );
 }
+
+const mapStateToProps =(state) =>{
+  return {
+    user:state.authReducer.user
+  }
+}
+const mapDispatchToProps=dispatch=> {
+  return {
+    fetchPosts:()=>dispatch(fetchPosts())
+  }
+}
+
+export default connect(mapStateToProps,mapDispatchToProps) (PopularProducts);

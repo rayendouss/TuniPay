@@ -32,7 +32,7 @@ const AuthService = {
     },
     logout:() =>{
         
-    API.default.headers["Authorization"]=''
+
     localStorage.removeItem('user')
     localStorage.removeItem('token')
     }
