@@ -42,12 +42,13 @@ export default function Product(props) {
    
   }
   
-  const productLevel = props.data.product_stock;
+  const productLevel = props.data.quantite;
   let bannerStockLevel = "";
   let stockLevelMessage = "";
-  let product_name = props.data.productname.replace(/ /g, "_");
+  let discount =0
+  let product_name = props.data.title.replace(/ /g, "_");
   
-  if (productLevel > 0 && productLevel < 100) {
+  if (productLevel > 0 && productLevel < 40) {
     bannerStockLevel = "product-banner-stock-level-low";
     stockLevelMessage = `Low stock, only ${productLevel} left.`;
   } else if (productLevel === 0) {
@@ -61,34 +62,32 @@ export default function Product(props) {
       <div className="card-product">
         <img
           className="card-img-top"
-          src={require("../assets/products/allproducts/" +
-            props.data.product_image)}
-          alt={props.data.product_image}
+          src={props.data.photo}
+          alt={props.data.photo}
         />
 
         <div
-          className={`${
-            props.data.product_status === "New"
-              ? "product-banner-new"
-              : "product-banner-trending"
-          }`}
+          className= 
+              "product-banner-new"
+             
+        
         >
-          {props.data.product_status}
+         New
         </div>
         <div className={bannerStockLevel}>{stockLevelMessage}</div>
         <div className="card-body">
           <h2 className="card-title">
-            {props.data.productname}</h2>
+            {props.data.title}</h2>
           <div className="row">
             <div className="col-lg-7  col-md-6 col-sm-6">
-              {props.data.discount > 0 ? (
+              {discount > 0 ? (
                 <h3>
                   {" "}
                   <span className="product-price-after-discount">
                     
                     {
                       
-                    new Intl.NumberFormat('en-US', {style: 'currency', currency:'ZAR'}).format( props.data.price -  (props.data.price * props.data.discount / 100)
+                    new Intl.NumberFormat('en-US', {style: 'currency', currency:'ZAR'}).format( props.data.price -  (props.data.price * discount / 100)
                     )
                   
                   }
@@ -102,7 +101,7 @@ export default function Product(props) {
                            
                   </span>{" "}
                   <span className="product-discount-rate">
-                    -{props.data.discount}%{" "}
+                    -{discount}%{" "}
                   </span>
                 </h3>
               ) : (
@@ -119,10 +118,10 @@ export default function Product(props) {
             </div>
             <div className="col-lg-5 col-md-6 col-sm-6 ">
               <div className="card-product-action-icons">
-                {props.data.product_stock >=1 ?
+                {props.data.quantite >=1 ?
                 <span
                   name="id"
-                  value={props.data.id}
+                  value={props.data._id}
                   className="card-product-action-cart-icon add-to-cart-icon"
                   
                   onClick={ () => handleAddToCart(props.data)}
@@ -137,7 +136,7 @@ export default function Product(props) {
 
                 <span>
                   <a
-                    href={`/catalog/item/${props.data.id}/${product_name}/view`}
+                    href={`/catalog/item/${props.data._id}/${product_name}/view`}
                     className="card-product-action-cart-icon"
                   >
                     <FontAwesomeIcon icon={faSearchPlus} />

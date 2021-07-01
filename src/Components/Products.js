@@ -1,11 +1,18 @@
-import React from "react";
+import React,{useState} from "react";
 import data from "../data/Allproducts.json";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "../styles/Products.scss";
 import Product from "./Product";
-
-export default function Products(props) {
-  const collectionname = props.collectionname;
+import { useSelector,useDispatch,connect } from "react-redux";
+import { fetchPosts } from "../store/actions/post";
+ function Products({user,fetchPost}) {
+  const [ProductData,setProductData]=useState([]);
+  fetchPost()
+  .then(res=>{
+      setProductData(res.posts)
+      console.log(ProductData)
+  })
+  /* const collectionname = props.collectionname;
   let products = [];
   let header_collection;
 
@@ -37,22 +44,33 @@ export default function Products(props) {
     default:
       products = data;
       header_collection="Products list";
-  }
+  } */
 
   return (
     <div className="container-products">
       <div className="header-products">
         <h1>
         
-            {header_collection}
+        All Products
         </h1>
       </div>
 
       <div className="row">
-        {products.map((product) => (
+        {ProductData.map((product) => (
           <Product data={product} key={product.id} />
         ))}
       </div>
     </div>
   );
 }
+const mapStateToProps =(state) =>{
+  return {
+    user:state.authReducer.user
+  }
+}
+const mapDispatchToProps=dispatch=> {
+  return {
+    fetchPost:()=>dispatch(fetchPosts())
+  }
+}
+export default connect(mapStateToProps,mapDispatchToProps)(Products);
