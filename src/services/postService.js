@@ -51,6 +51,18 @@ const postService = {
             return data
         })
     }
+    ,
+    Post:(id) => {
+        return API.get(`/post/${id}` ,
+        {
+            headers: {
+                'Authorization':`tuniPay ${localStorage.getItem('token')}`
+              }  
+        })
+        .then(({data})=>{
+            return data
+        })
+    }
 
 
 }

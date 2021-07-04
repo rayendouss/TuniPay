@@ -3,6 +3,7 @@ export const FETCH_POSTS = 'FETCH_POSTS'
 export const MY_POSTS = 'MY_POSTS'
 export const ADD_POST = 'ADD_POST'
 export const ALL_POSTS = 'ALL_POSTS'
+export const POST = 'POST'
 
 export const fetchPosts=()=> dispatch => {
     return postService.fetchPost()
@@ -27,6 +28,13 @@ export const AddPost=(params)=> dispatch => {
                   console.log(data)
                   dispatch({type:ADD_POST,payload:data})
               })
+
 }
 
-
+export const post=(id)=> dispatch => {
+    return postService.Post(id)
+      .then(data => {
+          dispatch({type:POST, payload:data.post})
+          return data
+      })
+}

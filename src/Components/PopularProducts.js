@@ -3,7 +3,7 @@ import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import "../styles/PopularProducts.scss";
-import { useSelector,useDispatch,connect } from "react-redux";
+import { connect } from "react-redux";
 
 import { faShoppingBasket, faEye } from "@fortawesome/free-solid-svg-icons";
 import { fetchPosts } from "../store/actions/post";

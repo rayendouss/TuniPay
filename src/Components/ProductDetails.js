@@ -10,6 +10,10 @@ import {
   faEnvelope,
   faPaperclip
 } from "@fortawesome/free-solid-svg-icons";
+import {
+  
+  useParams
+} from "react-router-dom";
 import Modal from './Modal/Modal'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import "../styles/ProductDetails.scss";
@@ -18,7 +22,6 @@ import {GlobalCartContext} from '../context/CartContext';
 import {  useToasts } from 'react-toast-notifications';
 
 export default function ProductDetails(props) {
-
   // const {action} =props;
   // let product_display_mode="action_view";
 
@@ -34,8 +37,14 @@ export default function ProductDetails(props) {
 
   // }
 
+  let selectedProduct=""
+
   
-   
+  if (props.key != null) {
+    selectedProduct = props.product.filter((product) => product._id === props.key);
+ console.log(selectedProduct[0])
+
+  } 
  
 
   const { addToast } = useToasts();
@@ -44,18 +53,27 @@ export default function ProductDetails(props) {
   const [showModalOption,setShowModalOption]=useState(false)
   const [displaySocialInputs,setdisplaySocialInputs]=useState(false)
   const [mail,setEmail]=useState("")
-  let ProductDetails;
-  let productDescription = [];
+  let ProductDetails=selectedProduct
+  
+  /*let productDescription = [];
   let productSize = [];
   props.product.map((product) => (ProductDetails = product));
-  productDescription = ProductDetails.product_details;
+  productDescription = ProductDetails.body;
   productSize = ProductDetails.size;
 
   const productStockLevel = ProductDetails.product_stock;
   let bannerStockLevel = "";
-  let stockLevelMessage = "";
- 
-  if (productStockLevel > 0 && productStockLevel < 100) {
+  let stockLevelMessage = ""; */
+ let discount =0
+ let brand="not now"
+ let color="not now"
+ let bannerStockLevel = "";
+ let stockLevelMessage = "";
+ let productDescription = [];
+
+
+ const productStockLevel = props.product.quantite;
+  if (productStockLevel > 0 && productStockLevel < 40) {
     bannerStockLevel = "product-details-banner-stock-level-low";
     stockLevelMessage = `Low stock, only ${productStockLevel} left.`;
   } else if (productStockLevel === 0) {
@@ -108,7 +126,7 @@ export default function ProductDetails(props) {
 
 function handleChangeSize(event) {
     
-    setProd_prod_selected_size(event.target.value)
+   // setProd_prod_selected_size(event.target.value)
     //console.log(event.target.value)
     
   }
@@ -116,22 +134,13 @@ function handleChangeSize(event) {
   
   
 
-  const description = productDescription.map((desc) => (
-    <h5  key={desc}>
-      <FontAwesomeIcon
-        icon={faCheckCircle}
-        className="product-description-icons"
-       
-      ></FontAwesomeIcon>
-      {desc}
-    </h5>
-  ));
+ 
 
-  const product_size = productSize.map((size) => (
+  /*const product_size = productSize.map((size) => (
     <option value={size}  key={size}> {size}</option>
 
    
-  ));
+  ));*/
 
   return (
     <div className="container-product-details">
@@ -139,25 +148,23 @@ function handleChangeSize(event) {
         <div className="col-lg-7">
           <img
             className="card-img-top"
-            src={require("../assets/products/allproducts/" +
-              ProductDetails.product_image)}
-            alt={ProductDetails.product_image}
+            src={
+              ProductDetails.photo}
+            alt={ProductDetails.photo}
           />
           <div
-            className={`${
-              ProductDetails.product_status === "New"
-                ? "product-details-banner-new"
-                : "product-banner-trending"
-            }`}
+            className=
+                 "product-details-banner-new"
+                      
           >
-            {ProductDetails.product_status}
+            New
           </div>
           <div className={bannerStockLevel}>{stockLevelMessage}</div>
         </div>
         <div className="col-lg-5">
-          <h1>{ProductDetails.productname}</h1>
+          <h1>{ProductDetails.title}</h1>
 
-          {ProductDetails.discount > 0 ? (
+          {discount > 0 ? (
             <h2>
               <span className="product-price-after-discount">
                 {
@@ -166,7 +173,7 @@ function handleChangeSize(event) {
                     currency: "ZAR",
                   }).format(
                     ProductDetails.price -
-                      (ProductDetails.price * ProductDetails.discount / 100)
+                      (ProductDetails.price * discount / 100)
                   )
                   // Math.round(ProductDetails.price - (ProductDetails.price*ProductDetails.discount/100))
                 }
@@ -178,7 +185,7 @@ function handleChangeSize(event) {
                 }).format(ProductDetails.price)}
               </span>{" "}
               <span className="product-discount-rate">
-                -{ProductDetails.discount}%{" "}
+                -{discount}%{" "}
               </span>
             </h2>
           ) : (
@@ -194,9 +201,9 @@ function handleChangeSize(event) {
             </h2>
           )}
           {/* <h2> R{ProductDetails.price} <span> R{ProductDetails.price}</span> <span> 50</span></h2> */}
-          <h3>Brand: {ProductDetails.brand}</h3>
+          <h3>Brand: {brand}</h3>
 
-          <h3>Color: {ProductDetails.color}</h3>
+          <h3>Color: {color}</h3>
           <h3>Size:</h3>
           <select
             className="form-control product-size-option"
@@ -205,10 +212,10 @@ function handleChangeSize(event) {
             value={prod_selected_size} onChange={handleChangeSize}
          
           >
-            {product_size}
+           Size
           </select>
           {/* <div className="mb-4 mt-4">{product_size}</div> */}
-          <h3>QTY:</h3>
+          <h3>QTY:{ProductDetails.quantite}</h3>
           <select 
            className="form-control product-size-option"
            value={prod_quantity} onChange={handleChange}>
@@ -227,7 +234,7 @@ function handleChangeSize(event) {
 
           <h3>Product Details:</h3>
 
-          <div className="mb-4 mt-4">{description}</div>
+          <div className="mb-4 mt-4">{ProductDetails.body}</div>
           <div className="row product-details-services">
             <div className="col-lg-4">
               <FontAwesomeIcon
@@ -261,7 +268,7 @@ function handleChangeSize(event) {
             <h2> Viewing product </h2>
           }
          */}
-          {productStockLevel === 0 ? (
+          {ProductDetails.quantite === 0 ? (
             <h2 className="out-of-stock-notice">
               <FontAwesomeIcon icon={faChartBar} /> Out of Stock
             </h2>

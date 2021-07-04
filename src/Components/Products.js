@@ -10,7 +10,7 @@ import { fetchPosts } from "../store/actions/post";
   fetchPost()
   .then(res=>{
       setProductData(res.posts)
-      console.log(ProductData)
+    
   })
   /* const collectionname = props.collectionname;
   let products = [];

@@ -1,4 +1,4 @@
-import { FETCH_POSTS , MY_POSTS , ADD_POST } from "../store/actions/post";
+import { FETCH_POSTS , MY_POSTS , ADD_POST ,POST} from "../store/actions/post";
 
 const initialState = {
     posts:{},
@@ -25,6 +25,10 @@ const postReducer = (state = initialState, action)=>{
                 myposts:payload,
                 posts:payload
              }
+             case POST :
+                return {
+                    ...state
+                 }
          
 
             default: {
