@@ -25,24 +25,9 @@ import { useToasts } from "react-toast-notifications";
   const { addItemTocart } = useContext(GlobalCartContext);
 
   function handleAddToCart(data) {
-    const newCartItem = {
-      productname: data.productname,
-      id: data.id,
-      price: data.price,
-      discount: data.discount,
-      color: data.color,
-      size: data.size,
-      selectedSize: data.size[0],
-      product_status: data.product_status,
-      product_stock: data.product_stock,
-      product_selected_qty: 1,
-      product_image: data.product_image,
-      brand: data.brand,
-
-      product_details: data.product_details,
-    };
-    addItemTocart(newCartItem);
-    addToast(data.productname + " has been saved for later shopping", {
+    
+    addItemTocart(data);
+    addToast(data.title + " has been saved for later shopping", {
       appearance: "success",
       autoDismiss: true,
     });
@@ -61,7 +46,7 @@ import { useToasts } from "react-toast-notifications";
           <div className="card-product-icon">
             <span
               className="card-product-cart-icon add-to-cart-icon"
-             
+              onClick={() => handleAddToCart(product)}
             >
               <FontAwesomeIcon icon={faShoppingBasket} />
             </span>
@@ -69,7 +54,7 @@ import { useToasts } from "react-toast-notifications";
             <span>
               <Link
                 className="card-product-cart-icon"
-                to={`/catalog/item/${product.id}/${product.productname}`}
+                to={`/catalog/item/${product._id}/${product.title}/view`}
               >
                 <FontAwesomeIcon icon={faEye} />
               </Link>

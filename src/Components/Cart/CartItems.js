@@ -26,7 +26,7 @@ export default function CartItems() {
           </thead>
           <tbody>
             {myShoppingCart.map((product) => (
-              <CartItem data={product} key={product.id} />
+              <CartItem data={product} key={product._id} />
             ))}
           </tbody>
         </table>

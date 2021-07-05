@@ -1,7 +1,8 @@
-import React , {useState,Fragment} from "react";
+import React , {useState,useContext,Fragment} from "react";
 import NavBar from "./Navigation/NavBar";
 import Footer from "./Navigation/Footer";
 import HeroImage from "./Navigation/HeroImage";
+import {GlobalCartContext} from '../context/CartContext';
 import { post } from "../store/actions/post";
 import TopBanner from "./Navigation/TopBanner";
 import { connect } from "react-redux";
@@ -67,6 +68,16 @@ import {
      addToast("mail envoyé à "+data,{appearance:"success"})
      console.log(data)
    }
+
+   const {addItemTocart}= useContext(GlobalCartContext)
+  
+  function  handleAddToCart(data) {
+    //alert(data.productname+" Added to cart");
+    addItemTocart(data);
+    addToast(data.title+" has been saved for later shopping", { appearance: 'success', autoDismiss: true, })
+  }
+
+
    function handleChange(event) {
     
     setProd_quantity(event.target.value)
@@ -222,7 +233,7 @@ function handleChangeSize(event) {
            <div >
          
             <button className="product-btn-add-to-cart shadow-none "
-        
+         onClick={ () => handleAddToCart(ProductData)}
             >
               <FontAwesomeIcon
                 icon={faCartPlus}

@@ -1,6 +1,6 @@
 import React, { Suspense, lazy } from "react";
 import "./styles/App.scss";
-import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import { BrowserRouter as Router, Redirect, Route, Switch } from "react-router-dom";
 import Login from './Components/Login/Login'
 import Register from './Components/Login/Register'
 import { GlobalCartContextProvider } from "./context/CartContext";
@@ -50,6 +50,7 @@ function App() {
               />
 
               <Route component={PageNotFound} />
+          
             </Switch>
           </Suspense>
         </Router>

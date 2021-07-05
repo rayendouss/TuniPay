@@ -5,14 +5,15 @@ import {  useToasts } from 'react-toast-notifications';
 
 export default function CartItem(props) {
   const { addToast } = useToasts();
-  let product_name = props.data.productname.replace(/ /g, "_");
+  let discount = 0
+  let product_name = props.data.title.replace(/ /g, "_");
   const { removeItemFromCart, saveItemforLater } = useContext(
     GlobalCartContext
   );
 
   function removeFromCart(id) {
     removeItemFromCart(id);
-    addToast(props.data.productname+" successfully removed from your cart", { appearance: 'info', autoDismiss: true, })
+    addToast(props.data.title+" successfully removed from your cart", { appearance: 'info', autoDismiss: true, })
    
   }
 
@@ -45,13 +46,13 @@ export default function CartItem(props) {
         <td className="row-cart-item-image-container">
           <div className="row-cart-item-image">
             <Link
-              to={`/catalog/item/${props.data.id}/${props.data.productname}`}
+              to={`/catalog/item/${props.data.id}/${props.data.title}`}
             >
               <img
                 className="card-img-top"
-                src={require("../../assets/products/allproducts/" +
-                  props.data.product_image)}
-                alt={props.data.product_image}
+                src={
+                  props.data.photo}
+                alt={props.data.photo}
               />
             </Link>
           </div>
@@ -60,13 +61,13 @@ export default function CartItem(props) {
           <div className="row-cart-item-description">
             <Link
               className="cat-item-link-product-details"
-              to={`/catalog/item/${props.data.id}/${props.data.productname}`}
+              to={`/catalog/item/${props.data.id}/${props.data.title}`}
             >
-              <h2 className="product-name">{props.data.productname}</h2>
+              <h2 className="product-name">{props.data.title}</h2>
             </Link>
-            <h3 className="product-size">Size: {props.data.selectedSize}</h3>
-            <h3 className="product-color">Color: {props.data.color}</h3>
-            <h3 className="product-color">QTY: {props.data.product_selected_qty}</h3>
+            <h3 className="product-size">Size: </h3>
+            <h3 className="product-color">Color: </h3>
+            <h3 className="product-color">QTY: {props.data.quantite}</h3>
 
           
             <button
@@ -105,8 +106,8 @@ export default function CartItem(props) {
                     style: "currency",
                     currency: "ZAR",
                   }).format(
-                    (props.data.price * props.data.product_selected_qty)-
-                      ((props.data.price *props.data.product_selected_qty) *props.data.discount) / 100
+                    (props.data.price * props.data.quantite)-
+                      ((props.data.price *props.data.product_selected_qty) *100) / 100
                   )}
                 </span>{" "}
                 <span className="product-price-before-discount">
@@ -116,11 +117,11 @@ export default function CartItem(props) {
                     new Intl.NumberFormat("en-US", {
                       style: "currency",
                       currency: "ZAR",
-                    }).format(props.data.price*props.data.product_selected_qty)
+                    }).format(props.data.price*props.data.quantite)
                   }
                 </span>{" "}
                 <span className="product-discount-rate">
-                  -{props.data.discount}%{" "}
+                  -{discount}%{" "}
                 </span>
               </h3>
             ) : (

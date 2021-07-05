@@ -18,27 +18,9 @@ export default function Product(props) {
   function  handleAddToCart(data) {
    
     
-    const newCartItem={
-      productname: data.productname,
-      cartItemId: uuidv4(),
-      id: data.id,
-      price: data.price,
-      discount: data.discount,
-      color: data.color,
-      size: data.size,
-      selectedSize:data.size[0],
-      product_status: data.product_status,
-      product_stock: data.product_stock,
-      product_selected_qty:1,
-      product_image: data.product_image,
-      brand: data.brand,
   
-      product_details: data.product_details
-
-
-    }
-    addItemTocart(newCartItem);
-    addToast(data.productname+" successfully added to your cart", { appearance: 'success', autoDismiss: true, })
+    addItemTocart(data);
+    addToast(data.title+" successfully added to your cart", { appearance: 'success', autoDismiss: true, })
    
   }
   
