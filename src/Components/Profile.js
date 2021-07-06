@@ -17,10 +17,10 @@ const Footer = React.lazy(() => import("./Navigation/Footer"));
 const Profile=({user,myPost}) => {
     
     const [PopularProductData,setPopularProductData]=useState([])
-    myPost()
-   
+    
+    myPost()  
     .then(res=>{
-     
+      console.log(res.mypost)
         setPopularProductData(res.mypost)
     })
     const data = PopularProductData.map((product) => {

@@ -5,13 +5,14 @@ import "./map.css"
 import "./style.scss"
 import { useToasts } from "react-toast-notifications";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-
-
+import { useSelector,useDispatch } from "react-redux";
+import { useHistory  } from "react-router-dom";
 import axios from "axios"
 import L from "leaflet"
 import { faShoppingBasket, faEye } from "@fortawesome/free-solid-svg-icons";
 import marker from "../../assets/images/marker.png"
 import useGeoLocation from "./useGeoLocation"
+import { AddCommande } from '../../store/actions/post'; 
 const markerIcon = new L.icon({
   iconUrl: marker,
   iconSize: [35,45],
@@ -20,8 +21,27 @@ const markerIcon = new L.icon({
 })
 
 const Maps=()=> {
+  const user=useSelector(state=>state.authReducer.user)
+  const [name,setName]=useState(user.name)
+  const [email,setEmail]=useState(user.email)
+  let history = useHistory();
+  const dispatch=useDispatch()
+  let listCommande=[]
+  const submitForm=(e)=>{
+    e.preventDefault()
+   let paiement="livraison"
+   let quantite=1
+    listCommande=JSON.parse(localStorage.getItem("myShoppingCart"))
+    listCommande.forEach(element => {
+         
+         dispatch(AddCommande({listCommande:element,paiement,quantite,address}))
+       });
+
+    
+    
+}
   const { addToast } = useToasts();
-  const [address, setAddress] = useState("");
+  const [address, setAddress] = useState(user.address);
       const [currentLocation,setCurrentLocation]=useState({ lat: 52.52437, lng: 13.41053 });
       const zoom=12 ;
       const mapRef=useRef()
@@ -48,12 +68,14 @@ const Maps=()=> {
          
           <div className="form">
             <div className="form-group">
-              <label htmlFor="username">Nom</label>
-              <input type="text" name="username" placeholder="username" />
+              <label htmlFor="username">Nom :</label>
+              <input type="text" name="username" placeholder="username" onChange={e=>setName(e.target.value)}
+                                      value={name} />
             </div>
             <div className="form-group">
-              <label htmlFor="email">Email</label>
-              <input type="text" name="email" placeholder="email" />
+              <label htmlFor="email">Email :</label>
+              <input type="text" name="email" placeholder="email"  onChange={e=>setEmail(e.target.value)}
+                                      value={email} />
             </div>
           
           </div>
@@ -88,8 +110,8 @@ const Maps=()=> {
          
          <div className="form">
            <div className="form-group">
-             <label htmlFor="username">Addresse</label>
-             <input type="text" name="Address" placeholder="push to get your current position" value={address}/>
+             <label htmlFor="username">Address :</label>
+             <input type="text" name="Address" placeholder="push to get your current position" onChange={e=>setAddress(e.target.value)} value={address}/>
            </div>
           
          
@@ -104,7 +126,7 @@ const Maps=()=> {
       <div style={{display:"flex",justifyContent:"start",alignItems:"center"}}>     <FontAwesomeIcon icon={faShoppingBasket} style={{marginRight:"10px"}} />   Payer avec carte bancaire </div>
       </button>  
       <br></br>
-      <button className="btn btn-primary" style={{fontSize:"20px" , width:"300px" }}  onClick={()=>addToast("commande effectué",{appearance:"success"})}> 
+      <button className="btn btn-primary" style={{fontSize:"20px" , width:"300px" }}  onClick={(e)=>submitForm(e)}> 
       <div style={{display:"flex", justifyContent:"start" ,alignItems:"center"}}>  <FontAwesomeIcon icon={faShoppingBasket} style={{marginRight:"10px"}} />    Paiement à la livraison </div>
       </button>
       <br></br>  

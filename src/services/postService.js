@@ -62,9 +62,22 @@ const postService = {
         .then(({data})=>{
             return data
         })
+    },
+
+    addCommande:(params) => {
+     
+        return API.post("/addCommande" ,params,
+           { headers: {
+                'Authorization':`tuniPay ${localStorage.getItem('token')}`
+              }}
+        
+        ) .then(({data})=>{
+            console.log(data)
+            return data
+        }).catch((err)=> {
+            console.log(err)
+        })
     }
-
-
 }
 
 export default postService

@@ -19,7 +19,7 @@ import { useToasts } from "react-toast-notifications";
   .then(res=>{
    
       setPopularProductData(res.posts)
-      console.log(PopularProductData)
+  
   })
   const { addToast } = useToasts();
   const { addItemTocart } = useContext(GlobalCartContext);
