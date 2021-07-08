@@ -77,7 +77,18 @@ const postService = {
         }).catch((err)=> {
             console.log(err)
         })
-    }
+    },
+    MyCommande:() => {
+        return API.get("/mycommande" ,
+        {
+            headers: {
+                'Authorization':`tuniPay ${localStorage.getItem('token')}`
+              }  
+        })
+        .then(({data})=>{
+            return data
+        })
+    },
 }
 
 export default postService

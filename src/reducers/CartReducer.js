@@ -16,7 +16,7 @@ export default (state, action)=>{
                 return{
                     ...state,
                     myShoppingCart: state.myShoppingCart.filter(
-                        (myShoppingCart) => myShoppingCart.cartItemId !== action.payload
+                        (myShoppingCart) => myShoppingCart._id !== action.payload
                     )
 
                 };

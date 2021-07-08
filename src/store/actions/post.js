@@ -5,6 +5,7 @@ export const ADD_POST = 'ADD_POST'
 export const ALL_POSTS = 'ALL_POSTS'
 export const POST = 'POST'
 export const ADD_COMMANDE = 'ADD_COMMANDE'
+export const MY_COMMANDE = 'MY_COMMANDE'
 
 export const fetchPosts=()=> dispatch => {
     return postService.fetchPost()
@@ -14,7 +15,7 @@ export const fetchPosts=()=> dispatch => {
       })
 }
 
-export const myPosts=()=> dispatch => { console.log("rayen")
+export const myPosts=()=> dispatch => { 
     return postService.MyPost()
       .then(data => {
           dispatch({type:MY_POSTS, payload:data.mypost})
@@ -48,4 +49,11 @@ export const AddCommande=(params)=> dispatch => {
                   dispatch({type:ADD_COMMANDE,payload:data})
               })
 
+}
+export const mycommande=()=> dispatch => { 
+    return postService.MyCommande()
+      .then(data => {
+          dispatch({type:MY_COMMANDE, payload:data.result})
+          return data
+      })
 }

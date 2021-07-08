@@ -11,8 +11,9 @@ export default function CartItem(props) {
     GlobalCartContext
   );
 
-  function removeFromCart(id) {
-    removeItemFromCart(id);
+  function removeFromCart(_id) {
+    console.log(_id)
+    removeItemFromCart(_id);
     addToast(props.data.title+" successfully removed from your cart", { appearance: 'info', autoDismiss: true, })
    
   }
@@ -72,7 +73,7 @@ export default function CartItem(props) {
           
             <button
               className="btn-cart-item-action-remove"
-              onClick={() => removeFromCart(props.data.cartItemId)}
+              onClick={() => removeFromCart(props.data._id)}
             >
               Remove
             </button>

@@ -25,6 +25,7 @@ const Maps=()=> {
   const [name,setName]=useState(user.name)
   const [email,setEmail]=useState(user.email)
   let history = useHistory();
+  const { addToast } = useToasts();
   const dispatch=useDispatch()
   let listCommande=[]
   const submitForm=(e)=>{
@@ -33,14 +34,14 @@ const Maps=()=> {
    let quantite=1
     listCommande=JSON.parse(localStorage.getItem("myShoppingCart"))
     listCommande.forEach(element => {
-         
-         dispatch(AddCommande({listCommande:element,paiement,quantite,address}))
-       });
-
-    
-    
+      addToast("commande effectué", { appearance: 'success', autoDismiss: true, })
+         dispatch(AddCommande({listCommande:element,paiement,quantite,address})).then(
+          
+          ()=>history.push('/cart')
+    )
+       }); 
 }
-  const { addToast } = useToasts();
+ 
   const [address, setAddress] = useState(user.address);
       const [currentLocation,setCurrentLocation]=useState({ lat: 52.52437, lng: 13.41053 });
       const zoom=12 ;
@@ -111,7 +112,7 @@ const Maps=()=> {
          <div className="form">
            <div className="form-group">
              <label htmlFor="username">Address :</label>
-             <input type="text" name="Address" placeholder="push to get your current position" onChange={e=>setAddress(e.target.value)} value={address}/>
+             <input type="text" name="Address" placeholder="push to get your current position" onChange={e=>setAddress(e.target.value)} value={address} required/>
            </div>
           
          

@@ -1,26 +1,51 @@
 import React, { Suspense ,useEffect,useState} from "react";
 import { useSelector,useDispatch,connect } from "react-redux";
 import loadingIcon from "../assets/images/dashboardloader3.gif";
-import { myPosts } from "../store/actions/post";
+import { mycommande, myPosts   } from "../store/actions/post";
+import Commandes from "./Commandes";
+import { Row,Col } from 'reactstrap';
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import "../styles/PopularProducts.scss"
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faShoppingBasket, faEye } from "@fortawesome/free-solid-svg-icons";
+import { faShoppingBasket, faEye,faStore,faFolder, faFolderOpen, faFolderPlus } from "@fortawesome/free-solid-svg-icons";
 import HeroImage from "../Components/Navigation/HeroImage";
+import { Container } from "react-bootstrap";
 const TopBanner = React.lazy(() => import("./Navigation/TopBanner"));
 const HeroText = React.lazy(() => import("./Navigation/HeroText"));
 const NavBar = React.lazy(() => import("./Navigation/NavBar"));
 const Footer = React.lazy(() => import("./Navigation/Footer"));
-const Profile=({user,myPost}) => {
-    
+const Profile=({user,myCmd,myPost}) => {
+  const [products,setProducts]=useState(true)
+  const [commandes,setCommandes]=useState(false)
     const [PopularProductData,setPopularProductData]=useState([])
+    const [MyCommandes,setMyCommandes]=useState([])
+  useEffect(()=>{
+     myCmd().then((res)=>{
+       
+       setMyCommandes(res.result)
+      
+     }
+
+     )
+  },[])
+   
+    const setProd=()=>{
+      setCommandes(false)
+       setProducts(true)
+    }
+    const setCmd=()=>{
+     console.log(MyCommandes)
     
+      setProducts(false)
+      setCommandes(true)
+     
+    }
     myPost()  
     .then(res=>{
-      console.log(res.mypost)
+
         setPopularProductData(res.mypost)
     })
     const data = PopularProductData.map((product) => {
@@ -44,7 +69,7 @@ const Profile=({user,myPost}) => {
                 <span>
                   <Link
                     className="card-product-cart-icon"
-                    to={`/catalog/item/${product.id}/${product.productname}`}
+                    to={`/catalog/item/${product._id}/${product.title}/view`}
                   >
                     <FontAwesomeIcon icon={faEye} />
                   </Link>
@@ -120,10 +145,42 @@ const Profile=({user,myPost}) => {
                 <NavBar />
                 <HeroImage />
         <p> welcome {user.name } </p>
-        <h1>My Products</h1>
+        <div style={{display:"flex",justifyContent:"center"  }} >
+        <h1 className="text-center " onClick={()=>setProd()}> <FontAwesomeIcon icon={faStore}  />My Products</h1>
+        <h1 className="text-center " style={{marginLeft:"20px"}} onClick={()=>setCmd()}> <FontAwesomeIcon icon={faFolderOpen} />My Commandes</h1>
+        </div>
+        { products ?
+        <div>
+        {  PopularProductData.length > 0 ?
+        <div>
+          
         <Slider {...settings} className="popular-product-large-screen">
        {data}
-      </Slider>
+      </Slider></div>
+        :
+        <h1 className="text-center ">  Products List is empty</h1>
+        }
+       </div>
+       :
+       ""
+}
+{ commandes ?
+        <div>
+        {  MyCommandes.length > 0 ?
+        
+         
+            <Commandes />
+           
+         
+   
+      
+        :
+        <h1 className="text-center ">  Commandes List is empty</h1>
+        } 
+       </div>
+       :
+       ""
+}
       <br></br>
         <br></br>
         <Footer />
@@ -134,12 +191,14 @@ const Profile=({user,myPost}) => {
 
 const mapStateToProps =(state) =>{
   return {
-    user:state.authReducer.user
+    user:state.authReducer.user,
+    cmnds:state.postReducer.mycommandes
   }
 }
 const mapDispatchToProps=dispatch=> {
   return {
-    myPost:()=>dispatch(myPosts())
+    myPost:()=>dispatch(myPosts()),
+    myCmd:()=>dispatch(mycommande())
   }
 }
 

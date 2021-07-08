@@ -1,9 +1,10 @@
-import { FETCH_POSTS , MY_POSTS , ADD_POST ,POST,ADD_COMMANDE} from "../store/actions/post";
+import { FETCH_POSTS , MY_POSTS , ADD_POST ,POST,ADD_COMMANDE,MY_COMMANDE} from "../store/actions/post";
 
 const initialState = {
     posts:{},
     myposts:{},
-    commande:{}
+    commande:{},
+    mycommandes:{}
    
 }
 const postReducer = (state = initialState, action)=>{
@@ -35,6 +36,11 @@ const postReducer = (state = initialState, action)=>{
                         ...state,
                         commande:payload
                      }
+                     case MY_COMMANDE :
+                        return {
+                            ...state,
+                            mycommandes:payload
+                         }
 
             default: {
                 return state;
