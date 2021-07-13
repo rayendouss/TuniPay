@@ -1,6 +1,6 @@
-# `clayma-store`
+# `TuniPay`
 
-An ecommerce UI with React, no back-end integration
+An ecommerce UI with React, with back-end integration
 
 ## Concepts used in this Application
 
@@ -8,7 +8,7 @@ An ecommerce UI with React, no back-end integration
 - react-context-api
 - react-local-storage
 
-## [Demo](https://claymastore.netlify.app)
+
 
 ## Usage
 
