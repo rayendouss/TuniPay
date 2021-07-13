@@ -14,7 +14,7 @@ const AuthService = {
        .catch(err => {
      
            console.log("auth error",err)
-           throw err
+           return err.error
        })
     },
     register:(data) =>{
@@ -24,11 +24,7 @@ const AuthService = {
             //API.default.headers["Authorization"]=`TuniPay ${res.token}`
        return res
          })
-        .catch(err => {
       
-            console.log("auth error",err)
-            throw err
-        })
     },
     logout:() =>{
         

@@ -6,17 +6,21 @@ import { useDispatch } from 'react-redux';
 import { register } from '../../store/actions/auth';
 import { useHistory  } from "react-router-dom";
 import './Login.css'
+import {  useToasts } from 'react-toast-notifications';
 
 const Register = () => {
     let history = useHistory();
+    const { addToast } = useToasts();
     const dispatch=useDispatch()
     const [email,setEmail]=useState('') 
       const [name,setName]=useState('')
     const [password,setPassword]=useState('')
     const submitForm=(e)=>{
         e.preventDefault()
-        dispatch(register({name,email,password})).then(
-            ()=>history.push('/home')
+        let address="rades"
+        dispatch(register({name,email,password,address})).then(
+            addToast(" Email has been sent to "+email+" to verify your account", { appearance: 'success', autoDismiss: false, })
+           
         )
     }
     return (
@@ -39,7 +43,7 @@ const Register = () => {
                                       value={password} />
                         </Form.Group>
 
-                        <Button variant="primary btn-block" type="submit" >Login</Button>
+                        <Button variant="primary btn-block" type="submit" >Register</Button>
                         <div className="text-left mt-3">
                              
                                 <a href="#"><small className="reset ml-2">Login</small></a>

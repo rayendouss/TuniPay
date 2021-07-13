@@ -3,6 +3,8 @@ import "./styles/App.scss";
 import { BrowserRouter as Router, Redirect, Route, Switch } from "react-router-dom";
 import Login from './Components/Login/Login'
 import Register from './Components/Login/Register'
+import Activate from './Components/Login/activate'
+import forgotPass from './Components/Login/forgotPass'
 import { GlobalCartContextProvider } from "./context/CartContext";
 import { ToastProvider } from "react-toast-notifications";
 import loadingIcon from "./assets/images/dashboardloader3.gif";
@@ -35,6 +37,8 @@ function App() {
               <Route exact path="/shop" component={Shopping} />
               <Route exact path="/search" component={SearchProducts} />
               <Route exact path="/cart" component={Cart} />
+              <Route exact path="/activate/:token" component={Activate} />
+              <Route exact path="/password/forgot" component={forgotPass} />
               <Route exact path="/trend/:collectionname" component={Shopping} />
               <Route exact path="/collections" component={Shopping} />
               <Route exact path="/delivery" component={Delivery} />

@@ -20,40 +20,40 @@ const Commandes =({myCmd})=> {
     return (
       <div class="rightside">
       <Grid container spacing={2}>
-      <Grid item xs={4}>
      {
      MyCommandes.map((item)=>{
         return(
             <div>
           
+      <Grid item xs={4}>
               <div class="video_card">
-      <div class="card-head">
-        <div class="tag">Live</div>
+      <div class="card-head" style={{backgroundImage:`url(${item.listCommande.photo})`}}>
+        <div class="tag">{item.status}</div>
       </div>
       <div class="card-body">
         <div class="content_card">
           <div class="avatar_holder">
             <img
               class="avatar"
-              alt="Remy Sharp"
-              src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixid=MnwxMjA3fDB8MHxzZWFyY2h8MXx8dXNlcnxlbnwwfHwwfHw%3D&ixlib=rb-1.2.1&w=1000&q=80"
+              alt={item.listCommande.photo}
+              src={item.listCommande.photo}
             />
           </div>
         </div>
         <div class="author">
           <div>
-            <span>React Query 3 - CRUD Library Application</span>
+            <span>{item.listCommande.title}</span>
           </div>
-          <div>ghassen mansouri</div>
+          <div>{item.commandeBy.name}</div>
         </div>
       </div>
     </div> 
+    </Grid>
             </div> 
         )
      })
     }
-     </Grid>
-            </Grid>  
+   </Grid>
             </div>
     )
   }

@@ -37,7 +37,7 @@ const Login = () => {
 
                         <Button variant="primary btn-block" type="submit" >Login</Button>
                         <div className="text-left mt-3">
-                                <a href="#"><small className="reset">Password Reset</small></a> II
+                                <a href="#"><small className="reset"><Link to="/password/forgot">Password Reset</Link></small></a> II
                                 <a href="#"><small className="reset ml-2"><Link to="/register">Register</Link></small></a>
                             </div>
                     </Form>
