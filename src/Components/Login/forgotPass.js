@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import uiImg from '../../assets/images/pass.svg';
+import {   Link ,useHistory  } from "react-router-dom";
 import {  useToasts } from 'react-toast-notifications';
 import {Button, Col, Container, Form, Row} from "react-bootstrap";
 import axios from 'axios';
@@ -35,7 +36,7 @@ const ForgetPass = ({history}) => {
                         </Form.Group>
                         <Button variant="primary btn-block" type="submit" >Submit</Button>
                         </Form>
-      
+                        <a ><small className="reset" style={{marginRight:"500px"}}><Link to="/">Login</Link></small></a>
                    
                 </Col>
                 

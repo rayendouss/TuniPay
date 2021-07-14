@@ -13,6 +13,7 @@ const Register = () => {
     const { addToast } = useToasts();
     const dispatch=useDispatch()
     const [email,setEmail]=useState('') 
+    const [lastn,setLastN]=useState('') 
       const [name,setName]=useState('')
     const [password,setPassword]=useState('')
     const submitForm=(e)=>{
@@ -30,9 +31,15 @@ const Register = () => {
                     <img className="icon-img" src={loginIcon} alt="icon" />
                     <Form onSubmit={submitForm}>
                     <Form.Group  >
-                            <Form.Control type="name" placeholder="Enter name"  onChange={e=>setName(e.target.value)}
+                            <Form.Control type="name" placeholder="Enter first name"  onChange={e=>setName(e.target.value)}
                                       value={name} />
                         </Form.Group>
+
+                        <Form.Group  >
+                            <Form.Control type="name" placeholder="Enter last name"  onChange={e=>setLastN(e.target.value)}
+                                      value={lastn} />
+                        </Form.Group>
+                        
                         <Form.Group controlId="formBasicEmail" >
                             <Form.Control type="email" placeholder="Enter email" onChange={e=>setEmail(e.target.value)}
                                       value={email} />
@@ -42,11 +49,15 @@ const Register = () => {
                             <Form.Control type="password" placeholder="Enter Password" onChange={e=>setPassword(e.target.value)}
                                       value={password} />
                         </Form.Group>
+                        <Form.Group controlId="dob">
+                        
+                            <Form.Control type="date" name="dob" placeholder="Date of Birth" />
+                        </Form.Group>
 
                         <Button variant="primary btn-block" type="submit" >Register</Button>
                         <div className="text-left mt-3">
                              
-                                <a href="#"><small className="reset ml-2">Login</small></a>
+                                <a href="/"><small className="reset ml-2">Login</small></a>
                             </div>
                     </Form>
                 </Col>

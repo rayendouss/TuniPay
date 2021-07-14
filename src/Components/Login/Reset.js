@@ -7,6 +7,7 @@ import {  useToasts } from 'react-toast-notifications';
 import {
     BrowserRouter as Router,Switch,Route,Link, useParams
   } from "react-router-dom";
+  
 const Reset = ({history}) => {
   const [email, setEmail] = useState("");
   const [email2, setEmail2] = useState("");
@@ -52,7 +53,7 @@ const Reset = ({history}) => {
                         <Button variant="primary btn-block" type="submit" >Submit</Button>
                         </Form>
       
-                   
+                        <a ><small className="reset"><Link to="/">Login</Link></small></a>
                 </Col>
                 
                 <Col lg={8} md={6} sm={12}>
