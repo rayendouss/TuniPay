@@ -1,4 +1,4 @@
-import React, { useState, useContext, Fragment } from "react";
+import React, { useState, useContext, Fragment ,useEffect} from "react";
 import {
   faBars,
   faShoppingCart,
@@ -8,19 +8,31 @@ import {
  faUser,
  
 } from "@fortawesome/free-solid-svg-icons";
+import axios from "axios";
+import use from "../../assets/images/use.svg"
 import Modal from "./Modal/Modal"
 import "../../styles/Navbar.scss";
 import { AddPost } from "../../store/actions/post";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { GlobalCartContext } from "../../context/CartContext";
 import { Link  ,useHistory} from "react-router-dom";
-import { useDispatch } from "react-redux";
+import { connect, useDispatch } from "react-redux";
 import {Button, Col, Container, Form, Row} from "react-bootstrap";
 import { logout } from "../../store/actions/auth";
-export default function NavBar() {
+ function NavBar({user}) {
   const { myShoppingCart } = useContext(GlobalCartContext);
+  const [profileP, setProfileP] = useState(false);
   const [toggleNav, setToggelNav] = useState(false);
   const [showModal,setProfileModal]= useState(false)
+  const [showModalUp,setProfileModalUp]= useState(false)
+  const [photoPr,setimagePr]=useState('')
+  const [email,setEmail]=useState('') 
+  const [lastn,setLastN]=useState('') 
+    const [name,setName]=useState('')
+    const [dateB,setDateB]=useState('')
+  const [password,setPassword]=useState('')
+  const [address,setaddress]=useState('')
+
 const dispatch= useDispatch()
 let history = useHistory();
   function handleToggle(e) {
@@ -51,11 +63,46 @@ let history = useHistory();
         
        
       })
-
-     
-      
-      
   }
+
+  const submitFormPr=(e)=>{
+    e.preventDefault() 
+    const data= new FormData()
+    data.append("file",photoPr)
+    console.log(name,lastn,dateB,address,photoPr)
+    data.append("upload_preset","stagePFE")
+    data.append("cloud-name","mernrayen")
+    fetch("https://api.cloudinary.com/v1_1/mernrayen/image/upload",{
+        method:"post",
+        body:data
+    }).then(res=>res.json())
+    .then(data =>{
+     
+      setimagePr(data.url)
+       console.log(data.url)
+     //  console.log(title,body,price,quantite,image)
+      axios.put('http://localhost:5000/updatePr',
+      {
+            email:user.email,
+            name:name,
+            lastname:lastn,
+            password:password,
+            birth:dateB,
+            photo:data.url,
+            _id:user._id,
+            address:address,
+            genre:"homme"},
+            { headers: {
+              'Authorization':`tuniPay ${localStorage.getItem('token')}`
+            }}
+      ).then(res=>{
+        console.log(res)
+      })
+      
+     
+    })
+  }
+
   return (
     <div>
       <header>
@@ -125,8 +172,9 @@ let history = useHistory();
               <li>
                 <Link to="/search">Search</Link>
               </li>
-           
-              <li className="nav-shopping-cart">
+               
+                
+              <li className="nav-shopping-cart" style={{marginRight:"30px"}}>
                 <Link
                   to="/cart"
                   className="cart position-relative d-inline-flex"
@@ -142,12 +190,16 @@ let history = useHistory();
                 </Link>
                
               </li>
+              
               <li>
-              <FontAwesomeIcon
-                    icon={faUser}
-                   style={{color:"white",marginLeft:"20px" ,height:"15px", width:"15px" }}
-                  />
+            
+            
+               <img  style={{width:"40px", height:"40px", borderRadius: "5px" }} src={user.photo}/> 
+              
+              
+            
               </li>
+       
               <li>
             
                 <Link to="#" >
@@ -161,7 +213,7 @@ let history = useHistory();
                     <Link to="/profile">My Profile</Link>
                   </li>
                   <li>
-                  <Link >Update Profile</Link>
+                  <Link onClick={()=> setProfileModalUp(true)}>Update Profile</Link>
                   </li>
                   <li>
                   <Link  onClick={()=> setProfileModal(true)}>Add Post</Link>
@@ -227,9 +279,63 @@ let history = useHistory();
                    </Fragment>
                </Modal>
             }
+
+
+          { showModalUp &&
+               <Modal click={()=> setProfileModalUp(false)}>
+                   <Fragment key="header">
+                     Update Profile
+                   </Fragment >
+                   <Fragment key="body">
+                   <Form onSubmit={submitFormPr}> 
+                        <Form.Group controlId="formBasicEmail" >
+                            <Form.Control  placeholder="Enter name" onChange={e=>setName(e.target.value)}
+                                      value={name} />
+                        </Form.Group>
+
+                        <Form.Group controlId="formBasicEmail" >
+                            <Form.Control  placeholder="Enter Lastname" onChange={e=>setLastN(e.target.value)}
+                                      value={lastn} />
+                        </Form.Group>
+                        
+                        <Form.Group controlId="formBasicEmail" >
+                            <Form.Control  placeholder="Enter Password" type="password" onChange={e=>setPassword(e.target.value)}
+                                      value={password} />
+                        </Form.Group>
+                        <Form.Group controlId="formBasicEmail" >
+                            <Form.Control  placeholder="Enter Address" onChange={e=>setaddress(e.target.value)}
+                                      value={address} />
+                        </Form.Group>
+                        <Form.Group controlId="dob">
+                        
+                        <Form.Control type="date" name="dob" placeholder="Date of Birth" onChange={e=>setDateB(e.target.value)}
+                                      value={dateB}/>
+                    </Form.Group>
+                        <Form.Group  >
+                            <input onChange={e=>setimagePr(e.target.files[0])} type="file" />
+                        </Form.Group>
+                        
+
+                        <Button variant="primary btn-block" type="submit" >Update</Button>
+                       
+                    </Form>
+                   </Fragment>
+                   <Fragment key="footer">
+                     
+                   </Fragment>
+               </Modal>
+            }
           </nav>
         </div>
       </header>
     </div>
   );
 }
+const mapStateToProps =(state) =>{
+  return {
+    user:state.authReducer.user,
+   
+  }
+}
+
+export default connect(mapStateToProps,null)(NavBar)

@@ -1,6 +1,7 @@
-import React, { Component, useState,useRef } from 'react';
+import React, { Component, useState,useRef ,Fragment} from 'react';
 import { Map, TileLayer , Marker } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
+import Modal from "../Modal/Modal"
 import "./map.css"
 import "./style.scss"
 import { useToasts } from "react-toast-notifications";
@@ -22,18 +23,65 @@ const markerIcon = new L.icon({
 
 const Maps=()=> {
   const user=useSelector(state=>state.authReducer.user)
+  const [paymee, setPaymee] = useState(false);
+
   const [name,setName]=useState(user.name)
   const [email,setEmail]=useState(user.email)
+  const[token,setToken]=useState()
   let history = useHistory();
   const { addToast } = useToasts();
   const dispatch=useDispatch()
   let listCommande=[]
+
+  const submitPaymee=(e)=>{
+    e.preventDefault()
+   
+   let paiement="paymee"
+   let quantite=1
+    listCommande=JSON.parse(localStorage.getItem("myShoppingCart"))
+    listCommande.forEach(element => {
+  
+      let headers = {"Authorization": "Token 92586776dd80b338d247f0dfdd65bfe61306301f", "Content-Type":"application/json"}
+      let dataa= {"vendor": 1746,
+          "amount": Number(element.price),
+          "note" : "Commande #1324"
+      }
+      axios.post(`https://sandbox.paymee.tn/api/v1/payments/create`,dataa,{headers})
+      .then((res)=>{
+        console.log(res.data.data)
+
+        setToken(res.data.data.token)
+        setPaymee(true)
+        dispatch(AddCommande({listCommande:element,paiement,quantite,address}))
+      })
+     
+       }); 
+}
+
+  const submitClicktopay=(e)=>{
+    e.preventDefault()
+   let paiement="bancaire"
+   let quantite=1
+    listCommande=JSON.parse(localStorage.getItem("myShoppingCart"))
+    listCommande.forEach(element => {
+      addToast("commande effectué", { appearance: 'success', autoDismiss: true, })
+      axios.post("https://test.clictopay.com/payment/rest/register.do?userName=esprittest-api&password=89Lgnx9UE&orderNumber=54321043&amount="+Number(element.price)+"&returnUrl=http://localhost:3000/delivery").then
+      ((result)=>{
+        console.log("bb")
+        console.log(result)
+        dispatch(AddCommande({listCommande:element,paiement,quantite,address}))
+        window.location.href = result.data.formUrl
+      })
+     
+       }); 
+}
   const submitForm=(e)=>{
     e.preventDefault()
    let paiement="livraison"
    let quantite=1
     listCommande=JSON.parse(localStorage.getItem("myShoppingCart"))
     listCommande.forEach(element => {
+      console.log(element)
       addToast("commande effectué", { appearance: 'success', autoDismiss: true, })
          dispatch(AddCommande({listCommande:element,paiement,quantite,address})).then(
           
@@ -120,12 +168,37 @@ const Maps=()=> {
        </div>
    
        <button className="btn btn-primary" style={{fontSize:"20px" , width:"300px"}} >
-       <div style={{display:"flex",justifyContent:"start",alignItems:"center"}}>     <FontAwesomeIcon icon={faShoppingBasket} style={{marginRight:"10px"}} />   Payer avec Compte Paymee </div>
+       <div style={{display:"flex",justifyContent:"start",alignItems:"center"}} onClick={(e)=>submitPaymee(e)}>     <FontAwesomeIcon icon={faShoppingBasket} style={{marginRight:"10px"}} />   Payer avec Compte Paymee 
+       
+   
+       </div>
       </button>
+
+      { paymee &&
+               <Modal click={()=> setPaymee(false)}>
+                   <Fragment key="header">
+                    Paymenet avec paymee
+                   </Fragment >
+                   <Fragment key="body">
+                   <form method="post" action="https://sandbox.paymee.tn/gateway/">
+<input type="hidden" name="payment_token" value={token} />
+<input type="hidden" name="url_ok" value="https://example.com/ok.php"/>
+<input type="hidden" name="url_ko" value="https://example.com/ko.php"/>
+<button> <FontAwesomeIcon icon={faShoppingBasket} style={{marginRight:"10px"}} />   Payer avec  Paymee</button>
+</form>
+                   </Fragment>
+                   <Fragment key="footer">
+                     
+                   </Fragment>
+               </Modal>
+            }
+
+
       <br></br>
-      <button className="btn btn-primary"  style={{fontSize:"20px" , width:"300px"}} >
+      <button className="btn btn-primary"  style={{fontSize:"20px" , width:"300px"}} onClick={(e)=>submitClicktopay(e)}>
       <div style={{display:"flex",justifyContent:"start",alignItems:"center"}}>     <FontAwesomeIcon icon={faShoppingBasket} style={{marginRight:"10px"}} />   Payer avec carte bancaire </div>
-      </button>  
+      </button> 
+  
       <br></br>
       <button className="btn btn-primary" style={{fontSize:"20px" , width:"300px" }}  onClick={(e)=>submitForm(e)}> 
       <div style={{display:"flex", justifyContent:"start" ,alignItems:"center"}}>  <FontAwesomeIcon icon={faShoppingBasket} style={{marginRight:"10px"}} />    Paiement à la livraison </div>

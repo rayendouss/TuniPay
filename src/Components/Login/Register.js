@@ -16,6 +16,7 @@ const Register = () => {
     const [lastn,setLastN]=useState('') 
       const [name,setName]=useState('')
     const [password,setPassword]=useState('')
+    const [address,setaddress]=useState('')
     const submitForm=(e)=>{
         e.preventDefault()
         let address="rades"
@@ -44,7 +45,7 @@ const Register = () => {
                             <Form.Control type="email" placeholder="Enter email" onChange={e=>setEmail(e.target.value)}
                                       value={email} />
                         </Form.Group>
-
+                       
                         <Form.Group controlId="formBasicPassword" >
                             <Form.Control type="password" placeholder="Enter Password" onChange={e=>setPassword(e.target.value)}
                                       value={password} />
@@ -53,7 +54,10 @@ const Register = () => {
                         
                             <Form.Control type="date" name="dob" placeholder="Date of Birth" />
                         </Form.Group>
-
+                        <Form.Group controlId="formBasicEmail" >
+                            <Form.Control type="email" placeholder="Enter address" onChange={e=>setaddress(e.target.value)}
+                                      value={address} />
+                        </Form.Group>
                         <Button variant="primary btn-block" type="submit" >Register</Button>
                         <div className="text-left mt-3">
                              

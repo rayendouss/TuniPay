@@ -13,13 +13,13 @@ export default function CartSummary(props) {
   let amountSaved=0;
   myShoppingCart.map((product) => (
    
-    cartTotal+=  product.price*product.product_selected_qty
+    cartTotal+=  product.price*product.quantite
      
     ))
 
     myShoppingCart.map((product) => (
    
-      amountSaved += (product.discount > 0 ? ((product.price * product.product_selected_qty)* product.discount / 100) : 0)
+      amountSaved += (product.discount > 0 ? ((product.price * product.quantite)* product.discount / 100) : 0)
        
       ))
   

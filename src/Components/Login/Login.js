@@ -22,18 +22,17 @@ const Login = () => {
             ()=>history.push('/home')
         )
     }
-const responseGoogle= response => {
-    console.log(response)
-    sendGoogleToken(response.tokenId)
-}
-    const sendGoogleToken = tokenId => {
+
+    const sendGoogleToken = response => {
+        console.log(response)
         axios.post("http://localhost:5000/googlelogin",{
-            idToken:tokenId
+            idToken:response.tokenId
         })
         .then(res=>
-         { console.log(res)
+         {
+
+              localStorage.setItem('user',JSON.stringify(res.data.user))
             localStorage.setItem('token',res.data.token)
-            localStorage.setItem('user',JSON.stringify(res.data.user))
             history.push('/home')
         }
         )
@@ -41,20 +40,28 @@ const responseGoogle= response => {
             console.log("google login error")
         })
     }
+    const responseGoogle= response => {       
+        sendGoogleToken(response)
+    }
+  
+    const sendFacebookToken=(userID,accessToken)=>{
+
+        axios.post("http://localhost:5000/FBlogin",{
+            userID,accessToken
+        }).then(res => {
+            console.log("fb",res)
+            localStorage.setItem('user',JSON.stringify(res.data.user))
+            localStorage.setItem('token',res.data.token)
+        
+            history.push('/home')
+        })  .catch((err)=>{
+            console.log("fb login error",err)
+        })
+    }
     const responseFacebook= response => {
         console.log(response)
         sendFacebookToken(response.userID,response.accessToken)
     }
-    const sendFacebookToken=(userID,accessToken)=>{
-        axios.post("http://localhost:5000/FBlogin",{
-            userID,accessToken
-        }).then(res => {
-            history.push('/home')
-        })  .catch((err)=>{
-            console.log("fb login error")
-        })
-    }
-
     return (
         <Container className="mt-5">
             <Row>
@@ -78,18 +85,7 @@ const responseGoogle= response => {
                   onSuccess={responseGoogle}
                   onFailure={responseGoogle}
                   cookiePolicy={'single_host_origin'}
-                  render={renderProps => (
-                    <button
-                      onClick={renderProps.onClick}
-                      disabled={renderProps.disabled}
-                      className='w-full max-w-xs font-bold shadow-sm rounded-lg py-3 bg-indigo-100 text-gray-800 flex items-center justify-center transition-all duration-300 ease-in-out focus:outline-none hover:shadow focus:shadow-sm focus:shadow-outline'
-                    >
-                      <div className=' p-2 rounded-full '>
-                        <i className='fab fa-google ' />
-                      </div>
-                      <span className='ml-4'>Sign In with Google</span>
-                    </button>
-                  )}
+             
                 ></GoogleLogin>
   
               <FacebookLogin

@@ -67,7 +67,7 @@ import { useToasts } from "react-toast-notifications";
             <h2>
               <span className="product-price-after-discount">
               
-                 { product.price} 
+                 { Number(product.price) } DT 
                 
               </span>{" "}
             
