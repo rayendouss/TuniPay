@@ -89,6 +89,15 @@ const postService = {
             return data
         })
     },
+    DeleteP:(id)=>{
+        return API.delete(`deletep/${id}`,
+      {  headers: {
+            'Authorization':`tuniPay ${localStorage.getItem('token')}`
+          }  }
+        ) .then(({data})=>{
+            return data
+        })
+    }
 }
 
 export default postService

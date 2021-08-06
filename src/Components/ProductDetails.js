@@ -22,20 +22,7 @@ import {GlobalCartContext} from '../context/CartContext';
 import {  useToasts } from 'react-toast-notifications';
 
 export default function ProductDetails(props) {
-  // const {action} =props;
-  // let product_display_mode="action_view";
 
-  //TODO 
-   
-  // switch(action){
- 
-  //   case "edit":
-  //        product_display_mode="action_edit";
-  //        break;
-  //   default: 
-  //        product_display_mode="action_view";
-
-  // }
 
   let selectedProduct=""
 
@@ -55,15 +42,7 @@ export default function ProductDetails(props) {
   const [mail,setEmail]=useState("")
   let ProductDetails=selectedProduct
   
-  /*let productDescription = [];
-  let productSize = [];
-  props.product.map((product) => (ProductDetails = product));
-  productDescription = ProductDetails.body;
-  productSize = ProductDetails.size;
-
-  const productStockLevel = ProductDetails.product_stock;
-  let bannerStockLevel = "";
-  let stockLevelMessage = ""; */
+ 
  let discount =0
  let brand="not now"
  let color="not now"
@@ -104,7 +83,7 @@ export default function ProductDetails(props) {
       product_selected_qty:prod_quantity,
       product_image: data.product_image,
       brand: data.brand,
-  
+  quantite:prod_quantity,
       product_details: data.product_details,
       
 
@@ -119,6 +98,7 @@ export default function ProductDetails(props) {
   function handleChange(event) {
     
     setProd_quantity(event.target.value)
+     console.log(prod_quantity)
     //console.log(event.target.value)
     
   }

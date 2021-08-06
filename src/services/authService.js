@@ -6,13 +6,13 @@ const AuthService = {
        return API.post("/signin",data)
        .then((res)=>{
         console.log(res.data.user)
-      
+        console.log(res)
         localStorage.setItem('user',JSON.stringify(res.data.user))
         localStorage.setItem('token',res.data.token)
       return res
         })
        .catch(err => {
-     
+  
            console.log("auth error",err)
            return err.error
        })
@@ -27,10 +27,11 @@ const AuthService = {
       
     },
     logout:() =>{
-        
+      
 
     localStorage.removeItem('user')
     localStorage.removeItem('token')
+   
     }
 }
 const setHeadersAndStorage= ({user,token})=>

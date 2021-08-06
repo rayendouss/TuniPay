@@ -47,7 +47,7 @@ export default function CartItem(props) {
         <td className="row-cart-item-image-container">
           <div className="row-cart-item-image">
             <Link
-              to={`/catalog/item/${props.data.id}/${props.data.title}`}
+              to={`/catalog/item/${props.data._id}/${props.data.title}/view`}
             >
               <img
                 className="card-img-top"
@@ -62,14 +62,15 @@ export default function CartItem(props) {
           <div className="row-cart-item-description">
             <Link
               className="cat-item-link-product-details"
-              to={`/catalog/item/${props.data.id}/${props.data.title}`}
+              to={`/catalog/item/${props.data._id}/${props.data.title}/view`}
             >
               <h2 className="product-name">{props.data.title}</h2>
             </Link>
             <h3 className="product-size">Size: </h3>
             <h3 className="product-color">Color: </h3>
-            <h3 className="product-color">QTY: {props.data.quantite}</h3>
-
+            <h3 className="product-color">MAX QTY: {props.data.quantite}</h3>
+            <h3 className="product-color">QTY ADDED: {props.data.count}</h3>
+            <h3 className="product-color">Price: {props.data.price}</h3>
           
             <button
               className="btn-cart-item-action-remove"
@@ -86,7 +87,7 @@ export default function CartItem(props) {
 
             <Link
               to={
-                `/catalog/item/${props.data.id}/${product_name}/edit`
+                `/catalog/item/${props.data._id}/${product_name}/edit`
                   
 
                 
@@ -118,7 +119,7 @@ export default function CartItem(props) {
                     new Intl.NumberFormat("en-US", {
                       style: "currency",
                       currency: "ZAR",
-                    }).format(props.data.price*props.data.quantite)
+                    }).format(parseInt(props.data.price)*props.data.quantite)
                   }
                 </span>{" "}
                 <span className="product-discount-rate">
@@ -130,12 +131,8 @@ export default function CartItem(props) {
                 {" "}
                 <span className="product-price-whit-no-discount">
                   {
-                    // props.data.price
-                    new Intl.NumberFormat("en-US", {
-                      style: "currency",
-                      currency: "ZAR",
-                    }).format(props.data.price)
-                  }
+                   parseInt(props.data.price) * parseInt(props.data.count)
+                  } DT
                 </span>
               </h3>
             )}

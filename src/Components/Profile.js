@@ -1,27 +1,36 @@
 import React, { Suspense ,useEffect,useState} from "react";
 import { useSelector,useDispatch,connect } from "react-redux";
 import loadingIcon from "../assets/images/dashboardloader3.gif";
-import { mycommande, myPosts   } from "../store/actions/post";
+import { mycommande, myPosts   ,deleteP} from "../store/actions/post";
 import Commandes from "./Commandes";
 import { Row,Col } from 'reactstrap';
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import "../styles/PopularProducts.scss"
+import "../styles/PopularProducts.scss";
+import {  useToasts } from 'react-toast-notifications';
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faShoppingBasket, faEye,faStore,faFolder, faFolderOpen, faFolderPlus } from "@fortawesome/free-solid-svg-icons";
+import { faShoppingBasket, faEye,faStore,faFolder, faFolderOpen, faFolderPlus,faTrash } from "@fortawesome/free-solid-svg-icons";
 import HeroImage from "../Components/Navigation/HeroImage";
 import { Container } from "react-bootstrap";
 const TopBanner = React.lazy(() => import("./Navigation/TopBanner"));
 const HeroText = React.lazy(() => import("./Navigation/HeroText"));
 const NavBar = React.lazy(() => import("./Navigation/NavBar"));
 const Footer = React.lazy(() => import("./Navigation/Footer"));
-const Profile=({user,myCmd,myPost}) => {
+const Profile=({user,myCmd,myPost,deletep}) => {
   const [products,setProducts]=useState(true)
   const [commandes,setCommandes]=useState(false)
     const [PopularProductData,setPopularProductData]=useState([])
     const [MyCommandes,setMyCommandes]=useState([])
+    const { addToast } = useToasts();
+    function deletepost(id){
+      deletep(id).then((res)=>{
+        addToast(" successfully deleted", { appearance: 'success', autoDismiss: true, })
+      })
+
+
+       }
   useEffect(()=>{
      myCmd().then((res)=>{
        
@@ -48,6 +57,8 @@ const Profile=({user,myCmd,myPost}) => {
 
         setPopularProductData(res.mypost)
     })
+      
+
     const data = PopularProductData.map((product) => {
       return (
         <div className="popular-product" key={product._id}>
@@ -59,12 +70,7 @@ const Profile=({user,myCmd,myPost}) => {
   
             <div className="card-product-extra-info">
               <div className="card-product-icon">
-                <span
-                  className="card-product-cart-icon add-to-cart-icon"
-                 
-                >
-                  <FontAwesomeIcon icon={faShoppingBasket} />
-                </span>
+               
   
                 <span>
                   <Link
@@ -73,6 +79,11 @@ const Profile=({user,myCmd,myPost}) => {
                   >
                     <FontAwesomeIcon icon={faEye} />
                   </Link>
+                </span>
+                   <span className="card-product-cart-icon" onClick={()=>deletepost(product._id)}>
+                 
+                    <FontAwesomeIcon icon={faTrash} />
+                  
                 </span>
               </div>
   
@@ -198,7 +209,8 @@ const mapStateToProps =(state) =>{
 const mapDispatchToProps=dispatch=> {
   return {
     myPost:()=>dispatch(myPosts()),
-    myCmd:()=>dispatch(mycommande())
+    myCmd:()=>dispatch(mycommande()),
+    deletep:(id)=>dispatch(deleteP(id))
   }
 }
 

@@ -25,7 +25,7 @@ import { useToasts } from "react-toast-notifications";
   const { addItemTocart } = useContext(GlobalCartContext);
 
   function handleAddToCart(data) {
-    
+    data.count=1
     addItemTocart(data);
     addToast(data.title + " has been saved for later shopping", {
       appearance: "success",

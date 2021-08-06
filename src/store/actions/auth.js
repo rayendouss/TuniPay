@@ -4,7 +4,7 @@ export const REGISTER="REGISTER" ;
 export const LOGIN="LOGIN" ;
 export const LOGOUT="LOGOUT" ;
 export const login= (params) => dispatch =>{
-    console.log("aa",params)
+    
   return  AuthService.login(params)
   .then(data=>
     {

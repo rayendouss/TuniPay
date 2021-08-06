@@ -52,25 +52,30 @@ const Maps=()=> {
 
         setToken(res.data.data.token)
         setPaymee(true)
-        dispatch(AddCommande({listCommande:element,paiement,quantite,address}))
+    
+        //dispatch(AddCommande({listCommande:element,paiement,quantite,address}))
       })
-     
+    
        }); 
 }
 
   const submitClicktopay=(e)=>{
     e.preventDefault()
    let paiement="bancaire"
-   let quantite=1
+    let sum=0
     listCommande=JSON.parse(localStorage.getItem("myShoppingCart"))
     listCommande.forEach(element => {
+    
+      let quantite=element.count
+      sum=sum+(Number(element.price)*quantite)
       addToast("commande effectué", { appearance: 'success', autoDismiss: true, })
-      axios.post("https://test.clictopay.com/payment/rest/register.do?userName=esprittest-api&password=89Lgnx9UE&orderNumber=54321043&amount="+Number(element.price)+"&returnUrl=http://localhost:3000/delivery").then
+      axios.post("https://test.clictopay.com/payment/rest/register.do?userName=esprittest-api&password=89Lgnx9UE&orderNumber=54421810&amount="+sum*100+"&returnUrl=http://localhost:3000/delivery").then
       ((result)=>{
-        console.log("bb")
+
+        console.log(sum)
         console.log(result)
-        dispatch(AddCommande({listCommande:element,paiement,quantite,address}))
-        window.location.href = result.data.formUrl
+        //dispatch(AddCommande({listCommande:element,paiement,quantite,address}))
+       window.location.href = result.data.formUrl
       })
      
        }); 

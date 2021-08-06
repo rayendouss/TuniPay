@@ -4,7 +4,7 @@ import loginIcon from '../../assets/images/user.png'
 import uiImg from '../../assets/images/register.svg';
 import { useDispatch } from 'react-redux';
 import { register } from '../../store/actions/auth';
-import { useHistory  } from "react-router-dom";
+import { useHistory ,Link } from "react-router-dom";
 import './Login.css'
 import {  useToasts } from 'react-toast-notifications';
 
@@ -33,35 +33,35 @@ const Register = () => {
                     <Form onSubmit={submitForm}>
                     <Form.Group  >
                             <Form.Control type="name" placeholder="Enter first name"  onChange={e=>setName(e.target.value)}
-                                      value={name} />
+                                      value={name} required/>
                         </Form.Group>
 
                         <Form.Group  >
                             <Form.Control type="name" placeholder="Enter last name"  onChange={e=>setLastN(e.target.value)}
-                                      value={lastn} />
+                                      value={lastn} required/>
                         </Form.Group>
                         
                         <Form.Group controlId="formBasicEmail" >
                             <Form.Control type="email" placeholder="Enter email" onChange={e=>setEmail(e.target.value)}
-                                      value={email} />
+                                      value={email} required/>
                         </Form.Group>
                        
                         <Form.Group controlId="formBasicPassword" >
                             <Form.Control type="password" placeholder="Enter Password" onChange={e=>setPassword(e.target.value)}
-                                      value={password} />
+                                      value={password} required/>
                         </Form.Group>
                         <Form.Group controlId="dob">
                         
-                            <Form.Control type="date" name="dob" placeholder="Date of Birth" />
+                            <Form.Control type="date" name="dob" placeholder="Date of Birth" required/>
                         </Form.Group>
                         <Form.Group controlId="formBasicEmail" >
                             <Form.Control type="email" placeholder="Enter address" onChange={e=>setaddress(e.target.value)}
-                                      value={address} />
+                                      value={address} required/>
                         </Form.Group>
                         <Button variant="primary btn-block" type="submit" >Register</Button>
                         <div className="text-left mt-3">
-                             
-                                <a href="/"><small className="reset ml-2">Login</small></a>
+                                <a ><small className="reset"><Link to="/">Login</Link></small></a> 
+                               
                             </div>
                     </Form>
                 </Col>

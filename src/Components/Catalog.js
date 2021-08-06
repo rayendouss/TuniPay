@@ -30,6 +30,7 @@ import {
   const [showModalOption,setShowModalOption]=useState(false)
   const [displaySocialInputs,setdisplaySocialInputs]=useState(false)
   const [mail,setEmail]=useState("")
+  const [count,setCount]=useState(1)
   const {id,action} =useParams();
   const { addToast } = useToasts();
   const [prod_quantity,setProd_quantity]=useState(1)
@@ -72,17 +73,23 @@ import {
    const {addItemTocart}= useContext(GlobalCartContext)
   
   function  handleAddToCart(data) {
-    //alert(data.productname+" Added to cart");
+   data.count=count
     addItemTocart(data);
     addToast(data.title+" has been saved for later shopping", { appearance: 'success', autoDismiss: true, })
   }
 
+  function decrease () {
+   if(count>1){
+    setCount(count-1)
+   }
+  }
 
-   function handleChange(event) {
-    
-    setProd_quantity(event.target.value)
-    //console.log(event.target.value)
-    
+  function increase  (data)  {
+   
+    if(count<data){
+      setCount(count+1)
+     }
+   
   }
 
 
@@ -173,21 +180,12 @@ function handleChangeSize(event) {
           </select>
           {/* <div className="mb-4 mt-4">{product_size}</div> */}
           <h3>QTY:{ProductData.quantite}</h3>
-          <select 
-           className="form-control product-size-option"
-           value={prod_quantity} onChange={handleChange}>
-            <option value="1">1</option>
-            <option value="2">2</option>
-            <option value="3">3</option>
-            <option value="4">4</option>
-            <option value="5">5</option>
-            <option value="6">6</option>
-            <option value="7">7</option>
-            <option value="8">8</option>
-            <option value="9">9</option>
-            <option value="10">10</option>
-          
-          </select>
+          <div className="def-number-input number-input">
+          <button onClick={()=>decrease()} className="minus"></button>
+          <input className="quantity" name="quantity" value={count} 
+          type="number" />
+          <button onClick={()=>increase(ProductData.quantite)} className="plus"></button>
+        </div>
 
           <h3>Product Details:</h3>
 

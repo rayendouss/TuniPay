@@ -35,8 +35,8 @@ const Commandes =({myCmd})=> {
           <div class="avatar_holder">
             <img
               class="avatar"
-              alt={item.listCommande.photo}
-              src={item.listCommande.photo}
+              alt={item.commandeBy.photo}
+              src={item.commandeBy.photo}
             />
           </div>
         </div>
@@ -44,7 +44,7 @@ const Commandes =({myCmd})=> {
           <div>
             <span>{item.listCommande.title}</span>
           </div>
-          <div>{item.commandeBy.name}</div>
+          <div>{item.commandeBy.name} {item.commandeBy.lastname}</div>
         </div>
       </div>
     </div> 

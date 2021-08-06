@@ -102,7 +102,13 @@ let history = useHistory();
      
     })
   }
-
+const submitlogout=(e)=>{
+  e.preventDefault()
+  dispatch(logout())
+    history.push('/')
+  
+  
+}
   return (
     <div>
       <header>
@@ -231,7 +237,7 @@ let history = useHistory();
                   <FontAwesomeIcon
                     icon={faSignOutAlt}
                     className="store-cart-icon"
-                    onClick={()=> dispatch(logout())}
+                    onClick={(e)=> submitlogout(e)}
                   />
               </li>
 
@@ -249,21 +255,21 @@ let history = useHistory();
                    <Form onSubmit={submitForm}> 
                         <Form.Group controlId="formBasicEmail" >
                             <Form.Control  placeholder="Enter title" onChange={e=>settitle(e.target.value)}
-                                      value={title} />
+                                      value={title} required/>
                         </Form.Group>
 
                         <Form.Group controlId="formBasicEmail" >
                             <Form.Control onChange={e=>setbody(e.target.value)}
-                                      value={body} />
+                                      value={body} required/>
                         </Form.Group>
 
                         <Form.Group controlId="formBasicEmail" >
                             <Form.Control onChange={e=>setprice(e.target.value)}
-                                      value={price} />
+                                      value={price} required/>
                         </Form.Group>
                         <Form.Group controlId="formBasicEmail" >
                             <Form.Control onChange={e=>setqt(e.target.value)}
-                                      value={quantite} />
+                                      value={quantite} required/>
                         </Form.Group>
                         <Form.Group  >
                             <input onChange={e=>setimage(e.target.files[0])} type="file" />
@@ -290,26 +296,26 @@ let history = useHistory();
                    <Form onSubmit={submitFormPr}> 
                         <Form.Group controlId="formBasicEmail" >
                             <Form.Control  placeholder="Enter name" onChange={e=>setName(e.target.value)}
-                                      value={name} />
+                                      value={name} required/>
                         </Form.Group>
 
                         <Form.Group controlId="formBasicEmail" >
                             <Form.Control  placeholder="Enter Lastname" onChange={e=>setLastN(e.target.value)}
-                                      value={lastn} />
+                                      value={lastn} required/>
                         </Form.Group>
                         
                         <Form.Group controlId="formBasicEmail" >
                             <Form.Control  placeholder="Enter Password" type="password" onChange={e=>setPassword(e.target.value)}
-                                      value={password} />
+                                      value={password} required/>
                         </Form.Group>
                         <Form.Group controlId="formBasicEmail" >
                             <Form.Control  placeholder="Enter Address" onChange={e=>setaddress(e.target.value)}
-                                      value={address} />
+                                      value={address} required/>
                         </Form.Group>
                         <Form.Group controlId="dob">
                         
                         <Form.Control type="date" name="dob" placeholder="Date of Birth" onChange={e=>setDateB(e.target.value)}
-                                      value={dateB}/>
+                                      value={dateB} required/>
                     </Form.Group>
                         <Form.Group  >
                             <input onChange={e=>setimagePr(e.target.files[0])} type="file" />

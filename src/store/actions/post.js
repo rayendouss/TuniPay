@@ -6,6 +6,7 @@ export const ALL_POSTS = 'ALL_POSTS'
 export const POST = 'POST'
 export const ADD_COMMANDE = 'ADD_COMMANDE'
 export const MY_COMMANDE = 'MY_COMMANDE'
+export const DELETE_POST = 'DELETE_POST'
 
 export const fetchPosts=()=> dispatch => {
     return postService.fetchPost()
@@ -56,4 +57,12 @@ export const mycommande=()=> dispatch => {
           dispatch({type:MY_COMMANDE, payload:data.result})
           return data
       })
+}
+
+export const deleteP=(id)=>dispatch =>{
+    return postService.DeleteP(id)
+    .then(data =>{
+        dispatch({type:DELETE_POST, payload:data.posts})
+        return data
+    })
 }

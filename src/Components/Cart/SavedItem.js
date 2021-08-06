@@ -49,7 +49,7 @@ export default function SavedItem(props) {
           <td className="row-cart-item-image-container">
             <div className="row-cart-item-image">
             <Link
-            to={`/catalog/item/${props.data.id}/${props.data.productname}`}
+            to={`/catalog/item/${props.data.id}/${props.data.productname}/view`}
             >
         
              <img
@@ -65,7 +65,7 @@ export default function SavedItem(props) {
           <td className="row-cart-item-description-container">
             <div className="row-cart-item-description">
             <Link className="cat-item-link-product-details"
-            to={`/catalog/item/${props.data.id}/${props.data.productname}`}
+            to={`/catalog/item/${props.data.id}/${props.data.productname}/view`}
             >
             <h2 className="product-name">{props.data.productname}</h2>
             </Link>
