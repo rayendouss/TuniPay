@@ -1,15 +1,23 @@
-import {LOGIN,LOGOUT,REGISTER} from '../store/actions/auth'
+import {LOGIN,LOGOUT,REGISTER,USER_GUIDE} from '../store/actions/auth'
 
 const initialState = {
     user:JSON.parse(localStorage.getItem('user')) || {},
     token:localStorage.getItem('token')|| "",
-    isLoggedIn:(localStorage.getItem('user')) ? true : false
+    isLoggedIn:(localStorage.getItem('user')) ? true : false,
+    userGuide: {
+        "nav":false
+    }
 }
 
 const authReducer = (state=initialState,action)=>{
     const {type,payload} = action
 
     switch(type){
+        case USER_GUIDE:
+            return{
+            ...state,
+            userGuide:action.payload
+        }
         case LOGIN:
             return{
                 ...state,

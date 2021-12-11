@@ -12,17 +12,47 @@ import {  useToasts } from 'react-toast-notifications';
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faShoppingBasket, faEye,faStore,faFolder, faFolderOpen, faFolderPlus,faTrash } from "@fortawesome/free-solid-svg-icons";
+import { Steps, Hints } from 'intro.js-react';
+import 'intro.js/introjs.css';
+import introJs from 'intro.js';
 import HeroImage from "../Components/Navigation/HeroImage";
 import { Container } from "react-bootstrap";
 const TopBanner = React.lazy(() => import("./Navigation/TopBanner"));
 const HeroText = React.lazy(() => import("./Navigation/HeroText"));
 const NavBar = React.lazy(() => import("./Navigation/NavBar"));
 const Footer = React.lazy(() => import("./Navigation/Footer"));
+
 const Profile=({user,myCmd,myPost,deletep}) => {
+  const [stepsEnabled,setstepsEnabled]=useState(true)
   const [products,setProducts]=useState(true)
   const [commandes,setCommandes]=useState(false)
     const [PopularProductData,setPopularProductData]=useState([])
     const [MyCommandes,setMyCommandes]=useState([])
+    const onExit=()=>{
+      setstepsEnabled(false)
+     
+    }
+    const intro = 
+{
+  stepsEnabled,
+  initialStep:0,
+  steps : 
+  [
+    {
+    element: '#myproduct',
+    intro: '<strong> My Product </strong> <br> Cliquez pour voir la liste de vos produits',
+    position: 'right',
+   
+  },
+ 
+  {
+    element: '#mycommande',
+    intro: '<strong> My commande </strong> <br>  Cliquez pour voir la liste de vos commandes',
+    position: 'right',
+   
+  }
+]}
+
     const { addToast } = useToasts();
     function deletepost(id){
       deletep(id).then((res)=>{
@@ -33,7 +63,7 @@ const Profile=({user,myCmd,myPost,deletep}) => {
        }
   useEffect(()=>{
      myCmd().then((res)=>{
-       
+       console.log(res)
        setMyCommandes(res.result)
       
      }
@@ -155,10 +185,21 @@ const Profile=({user,myCmd,myPost,deletep}) => {
                 <TopBanner />
                 <NavBar />
                 <HeroImage />
-        <p> welcome {user.name } </p>
+                <Steps 
+         enabled={intro.stepsEnabled}
+         steps={intro.steps}
+         initialStep={intro.initialStep}
+         options={{
+           showStepNumbers:true,
+           doneLabel:"Finish",
+           nextLabel:"Next"
+         }}
+         onExit={()=>onExit()}
+
+      />
         <div style={{display:"flex",justifyContent:"center"  }} >
-        <h1 className="text-center " onClick={()=>setProd()}> <FontAwesomeIcon icon={faStore}  />My Products</h1>
-        <h1 className="text-center " style={{marginLeft:"20px"}} onClick={()=>setCmd()}> <FontAwesomeIcon icon={faFolderOpen} />My Commandes</h1>
+        <h1 className="text-center " onClick={()=>setProd()} id="myproduct"> <FontAwesomeIcon icon={faStore}  />My Products</h1>
+        <h1 className="text-center " style={{marginLeft:"20px"}} onClick={()=>setCmd()} id="mycommande"> <FontAwesomeIcon icon={faFolderOpen} />My Commandes</h1>
         </div>
         { products ?
         <div>

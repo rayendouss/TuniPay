@@ -55,7 +55,7 @@ import { fetchPosts } from "../store/actions/post";
         </h1>
       </div>
 
-      <div className="row">
+      <div className="row" id="products">
         {ProductData.map((product) => (
           <Product data={product} key={product.id} />
         ))}

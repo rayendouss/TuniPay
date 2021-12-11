@@ -1,6 +1,7 @@
 
 import AuthService from "../../services/authService";
 export const REGISTER="REGISTER" ;
+export const USER_GUIDE="USER_GUIDE"
 export const LOGIN="LOGIN" ;
 export const LOGOUT="LOGOUT" ;
 export const login= (params) => dispatch =>{

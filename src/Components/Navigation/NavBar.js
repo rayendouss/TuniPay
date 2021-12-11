@@ -19,6 +19,10 @@ import { Link  ,useHistory} from "react-router-dom";
 import { connect, useDispatch } from "react-redux";
 import {Button, Col, Container, Form, Row} from "react-bootstrap";
 import { logout } from "../../store/actions/auth";
+import { Steps, Hints } from 'intro.js-react';
+import 'intro.js/introjs.css';
+import introJs from 'intro.js';
+
  function NavBar({user}) {
   const { myShoppingCart } = useContext(GlobalCartContext);
   const [profileP, setProfileP] = useState(false);
@@ -32,6 +36,7 @@ import { logout } from "../../store/actions/auth";
     const [dateB,setDateB]=useState('')
   const [password,setPassword]=useState('')
   const [address,setaddress]=useState('')
+  const [stepsEnabled,setstepsEnabled]=useState(true)
 
 const dispatch= useDispatch()
 let history = useHistory();
@@ -39,6 +44,7 @@ let history = useHistory();
     e.preventDefault();
     setToggelNav(!toggleNav);
   }
+ 
   const [title,settitle]=useState('')
   const [body,setbody]=useState('')
   const [price,setprice]=useState('')
@@ -109,9 +115,73 @@ const submitlogout=(e)=>{
   
   
 }
+const onExit=()=>{
+  setstepsEnabled(false)
+  localStorage.setItem('userguide',"true")
+}
+const intro = 
+{
+  stepsEnabled,
+  initialStep:0,
+  steps : 
+  [
+    {
+    element: '#home',
+    intro: '<strong> Home page </strong> <br> Consulter la page d'+"'"+'acceuil',
+    position: 'right',
+   
+  },
+  {
+    element: '#product',
+    intro: '<strong> Product page </strong> <br> Consulter la page de nos produits',
+    position: 'right',
+   
+  },
+  {
+    element: '#collection',
+    intro: '<strong> Collection page </strong> <br> Consulter la page de nos collections',
+    position: 'right',
+   
+  },
+  {
+    element: '#search',
+    intro: '<strong> Search page </strong> <br> Cherche un page',
+    position: 'right',
+   
+  },
+  {
+    element: '#panier',
+    intro: '<strong> Cart page </strong> <br> La liste des produits ajout'+"é"+'au panier',
+    position: 'right',
+   
+  },
+  {
+    element: '#profile',
+    intro: '<strong> Profile page </strong> <br> Consulter votre profile',
+    position: 'right',
+   
+  }
+]}
+
+
+
+
   return (
     <div>
       <header>
+       
+       {localStorage.getItem('userguide')=="false" ? <Steps 
+         enabled={intro.stepsEnabled}
+         steps={intro.steps}
+         initialStep={intro.initialStep}
+         options={{
+           showStepNumbers:true,
+           doneLabel:"Finish",
+           nextLabel:"Next"
+         }}
+         onExit={()=>onExit()}
+
+      />:""}
         <div className="container-nav">
           <nav className={` ${toggleNav ? "active" : ""}`}>
             <div className="menu-icon">
@@ -127,17 +197,17 @@ const submitlogout=(e)=>{
               />
             </div>
 
-            <ul className="navigation-list">
-              <li>
+            <ul className="navigation-list" >
+              <li id="home">
                 <Link to="/home">
-                Home
+                Home 
                 </Link>
                 {/* <a href="/">Home</a>     */}
               </li>
-              <li>
+              <li id="product">
               <Link to="#">
               Products
-              <i className="icon ">
+              <i className="icon " id="product">
                     <FontAwesomeIcon icon={faCaretDown} />
                   </i>
                 </Link>
@@ -158,10 +228,10 @@ const submitlogout=(e)=>{
                   </li>
                 </ul>
               </li>
-              <li>
-                <Link to="#">
+              <li id="collection">
+                <Link to="#" >
                   Collections
-                  <i className="icon ">
+                  <i className="icon " >
                     <FontAwesomeIcon icon={faCaretDown} />
                   </i>
                 </Link>
@@ -175,12 +245,12 @@ const submitlogout=(e)=>{
                 </ul>
               </li>
 
-              <li>
+              <li id="search">
                 <Link to="/search">Search</Link>
               </li>
                
                 
-              <li className="nav-shopping-cart" style={{marginRight:"30px"}}>
+              <li className="nav-shopping-cart" style={{marginRight:"30px"}} id="panier">
                 <Link
                   to="/cart"
                   className="cart position-relative d-inline-flex"
@@ -206,11 +276,11 @@ const submitlogout=(e)=>{
             
               </li>
        
-              <li>
+              <li id="profile">
             
-                <Link to="#" >
+                <Link to="#"  >
                   Profile
-                  <i className="icon ">
+                  <i className="icon " >
                     <FontAwesomeIcon icon={faCaretDown} />
                   </i>
                 </Link>
@@ -340,7 +410,7 @@ const submitlogout=(e)=>{
 const mapStateToProps =(state) =>{
   return {
     user:state.authReducer.user,
-   
+    
   }
 }
 

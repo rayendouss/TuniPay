@@ -68,8 +68,8 @@ const Maps=()=> {
     
       let quantite=element.count
       sum=sum+(Number(element.price)*quantite)
-      addToast("commande effectué", { appearance: 'success', autoDismiss: true, })
-      axios.post("https://test.clictopay.com/payment/rest/register.do?userName=esprittest-api&password=89Lgnx9UE&orderNumber=54421810&amount="+sum*100+"&returnUrl=http://localhost:3000/delivery").then
+     
+      axios.post("https://test.clictopay.com/payment/rest/register.do?userName=esprittest-api&password=89Lgnx9UE&orderNumber=34421910&amount="+sum*100+"&returnUrl=http://localhost:3000/delivery").then
       ((result)=>{
 
         console.log(sum)

@@ -4,6 +4,8 @@ import { Card, CardImg, CardText, Col,
   import Grid from "@material-ui/core/Grid";
   import { useSelector,useDispatch,connect } from "react-redux";
   import { mycommande} from "../store/actions/post";
+  import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+  import { faTrash } from "@fortawesome/free-solid-svg-icons";
   import "./VideoCard.css";
 const Commandes =({myCmd})=> {
     const [MyCommandes,setMyCommandes]=useState([])
@@ -46,8 +48,14 @@ const Commandes =({myCmd})=> {
           </div>
           <div>{item.commandeBy.name} {item.commandeBy.lastname}</div>
         </div>
+    <div style={{marginLeft:"280px"}}>    <span className="card-product-cart-icon" >
+                 
+                 <FontAwesomeIcon icon={faTrash} />
+               
+             </span> </div>
       </div>
     </div> 
+   
     </Grid>
             </div> 
         )
