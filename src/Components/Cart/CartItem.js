@@ -1,8 +1,10 @@
-import React, { useContext } from "react";
+import React, { useContext ,useState} from "react";
 import { Link } from "react-router-dom";
 import { GlobalCartContext } from "../../context/CartContext";
 import {  useToasts } from 'react-toast-notifications';
-
+import { Steps, Hints } from 'intro.js-react';
+import 'intro.js/introjs.css';
+import introJs from 'intro.js';
 export default function CartItem(props) {
   const { addToast } = useToasts();
   let discount = 0
@@ -10,7 +12,65 @@ export default function CartItem(props) {
   const { removeItemFromCart, saveItemforLater } = useContext(
     GlobalCartContext
   );
-
+  const [stepsEnabled,setstepsEnabled]=useState(true)
+  const onExit=()=>{
+    setstepsEnabled(false)
+   
+  }
+  const intro = 
+  {
+    stepsEnabled,
+    initialStep:0,
+    steps : 
+    [
+      {
+      element: '#image',
+      intro: '<strong> Product picture </strong> <br> Cliquez pour voir les détails du produit',
+      position: 'right',
+     
+    },  
+    {
+      element: '#desc',
+      intro: '<strong> Product description </strong> <br> les caractéristiques du produit ',
+      position: 'right',
+     
+    },
+  
+    {
+      element: '#remove',
+      intro: '<strong> Delete product </strong> <br>Effacer le produit du panier ',
+      position: 'right',
+     
+    },
+    {
+      element: '#save',
+      intro: '<strong> Save product </strong> <br>Sauvegarder le produit pour le prochain achats ',
+      position: 'right',
+     
+    },
+    {
+      element: '#edit',
+      intro: '<strong> Edit product </strong> <br>Modifier le choix de votre quantité ',
+      position: 'right',
+     
+    },
+    {
+      element: '#cart',
+      intro: '<strong> Cart Summary </strong> <br>La liste des produits avec le prix total ',
+      position: 'right',
+     
+    },
+    {
+      element: '#btnpay',
+      intro: '<strong> Pay </strong> <br>Cliquez pour passer au page de paiements  ',
+      position: 'right',
+     
+    },
+    
+  
+   
+  
+  ]}
   function removeFromCart(_id) {
     console.log(_id)
     removeItemFromCart(_id);
@@ -44,8 +104,20 @@ export default function CartItem(props) {
   return (
     <>
       <tr className="row-cart-item ">
+      <Steps 
+         enabled={intro.stepsEnabled}
+         steps={intro.steps}
+         initialStep={intro.initialStep}
+         options={{
+           showStepNumbers:true,
+           doneLabel:"Finish",
+           nextLabel:"Next"
+         }}
+         onExit={()=>onExit()}
+
+      />
         <td className="row-cart-item-image-container">
-          <div className="row-cart-item-image">
+          <div className="row-cart-item-image" id="image">
             <Link
               to={`/catalog/item/${props.data._id}/${props.data.title}/view`}
             >
@@ -59,7 +131,7 @@ export default function CartItem(props) {
           </div>
         </td>
         <td className="row-cart-item-description-container">
-          <div className="row-cart-item-description">
+          <div className="row-cart-item-description" id="desc">
             <Link
               className="cat-item-link-product-details"
               to={`/catalog/item/${props.data._id}/${props.data.title}/view`}
@@ -72,13 +144,13 @@ export default function CartItem(props) {
             <h3 className="product-color">QTY ADDED: {props.data.count}</h3>
             <h3 className="product-color">Price: {props.data.price}</h3>
           
-            <button
+            <button id="remove"
               className="btn-cart-item-action-remove"
               onClick={() => removeFromCart(props.data._id)}
             >
               Remove
             </button>
-            <button
+            <button id="save"
               className="btn-cart-item-action-save-edit"
               onClick={() => saveForLater(props.data)}
             >
@@ -93,7 +165,7 @@ export default function CartItem(props) {
                 
               }
             >
-              <button className="btn-cart-item-action-save-edit">Edit</button>
+              <button id="edit" className="btn-cart-item-action-save-edit">Edit</button>
             </Link>
           </div>
         </td>

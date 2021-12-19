@@ -14,6 +14,9 @@ import { faShoppingBasket, faEye } from "@fortawesome/free-solid-svg-icons";
 import marker from "../../assets/images/marker.png"
 import useGeoLocation from "./useGeoLocation"
 import { AddCommande } from '../../store/actions/post'; 
+import { Steps, Hints } from 'intro.js-react';
+import 'intro.js/introjs.css';
+import introJs from 'intro.js';
 const markerIcon = new L.icon({
   iconUrl: marker,
   iconSize: [35,45],
@@ -30,6 +33,73 @@ const Maps=()=> {
   const[token,setToken]=useState()
   let history = useHistory();
   const { addToast } = useToasts();
+  const [stepsEnabled,setstepsEnabled]=useState(true)
+  const onExit=()=>{
+    setstepsEnabled(false)
+   
+  }
+  const intro = 
+  {
+    stepsEnabled,
+    initialStep:0,
+    steps : 
+    [
+      {
+      element: '#commande',
+      intro: '<strong> Commande </strong> <br> Bienvenue sur la page des commandes',
+      position: 'right',
+     
+    }, 
+    {
+      element: '#nom',
+      intro: '<strong> Nom du Commande </strong> <br>Saisissez votre nom pour la commande',
+      position: 'right',
+     
+    },  
+    {
+      element: '#email',
+      intro: '<strong> Email </strong> <br>Votre Email pour recevoir la fiche de livraison',
+      position: 'right',
+     
+    },  
+    {
+      element: '#map',
+      intro: '<strong> Maps </strong> <br>Choisissez votre address pour la livraison',
+      position: 'right',
+     
+    },  
+    {
+      element: '#locate',
+      intro: '<strong> Position </strong> <br>Cliquez pour obtenir votre position actuelle',
+      position: 'right',
+     
+    },
+    {
+      element: '#address',
+      intro: '<strong> Address </strong> <br>Saisissez votre address manuellement',
+      position: 'right',
+     
+    },  
+    {
+      element: '#payme',
+      intro: '<strong> Payer avec paymee </strong> <br>Payer avec votre compte paymee à distance',
+      position: 'right',
+     
+    },  
+    {
+      element: '#clicktopay',
+      intro: '<strong> Payer avec une carte bancaire </strong> <br>Payer avec votre compte bancaire à distance',
+      position: 'right',
+     
+    },
+    {
+      element: '#livraison',
+      intro: '<strong> Payer main à main </strong> <br>Payer lorsque vous recevez la livraison ',
+      position: 'right',
+     
+    },  
+    
+  ]}
   const dispatch=useDispatch()
   let listCommande=[]
 
@@ -115,18 +185,30 @@ const Maps=()=> {
     }
     return (
       <div>
+           <Steps 
+         enabled={intro.stepsEnabled}
+         steps={intro.steps}
+         initialStep={intro.initialStep}
+         options={{
+           showStepNumbers:true,
+           doneLabel:"Finish",
+           nextLabel:"Next"
+         }}
+         onExit={()=>onExit()}
+
+      />
      
-             <div className="base-container">
+             <div className="base-container" id="commande">
         <div className="header">Commande</div>
         <div className="content">
          
           <div className="form">
-            <div className="form-group">
+            <div className="form-group" id="nom">
               <label htmlFor="username">Nom :</label>
               <input type="text" name="username" placeholder="username" onChange={e=>setName(e.target.value)}
                                       value={name} />
             </div>
-            <div className="form-group">
+            <div className="form-group" id="email">
               <label htmlFor="email">Email :</label>
               <input type="text" name="email" placeholder="email"  onChange={e=>setEmail(e.target.value)}
                                       value={email} />
@@ -137,7 +219,7 @@ const Maps=()=> {
       
     
  
-      <Map  center={currentLocation} zoom={zoom} style={{width:"50%",height:"400px"}}>
+      <Map  center={currentLocation} zoom={zoom} style={{width:"50%",height:"400px"}} id="map">
         <TileLayer 
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
             attribution="&copy; <a href=&quot;http://osm.org/copyright&quot;>OpenStreetMap</a> contributors"
@@ -157,13 +239,13 @@ const Maps=()=> {
      }
       </Map>
     
-      <button className="btn btn-primary" onClick={showMyLocation} >
+      <button className="btn btn-primary" onClick={showMyLocation} id="locate">
         Locate Me
       </button>
       <div className="content">
          
          <div className="form">
-           <div className="form-group">
+           <div className="form-group" id="address">
              <label htmlFor="username">Address :</label>
              <input type="text" name="Address" placeholder="push to get your current position" onChange={e=>setAddress(e.target.value)} value={address} required/>
            </div>
@@ -172,7 +254,7 @@ const Maps=()=> {
          </div>
        </div>
    
-       <button className="btn btn-primary" style={{fontSize:"20px" , width:"300px"}} >
+       <button className="btn btn-primary" style={{fontSize:"20px" , width:"300px"}} id="payme">
        <div style={{display:"flex",justifyContent:"start",alignItems:"center"}} onClick={(e)=>submitPaymee(e)}>     <FontAwesomeIcon icon={faShoppingBasket} style={{marginRight:"10px"}} />   Payer avec Compte Paymee 
        
    
@@ -200,12 +282,12 @@ const Maps=()=> {
 
 
       <br></br>
-      <button className="btn btn-primary"  style={{fontSize:"20px" , width:"300px"}} onClick={(e)=>submitClicktopay(e)}>
+      <button className="btn btn-primary"  style={{fontSize:"20px" , width:"300px"}} onClick={(e)=>submitClicktopay(e)} id="clicktopay">
       <div style={{display:"flex",justifyContent:"start",alignItems:"center"}}>     <FontAwesomeIcon icon={faShoppingBasket} style={{marginRight:"10px"}} />   Payer avec carte bancaire </div>
       </button> 
   
       <br></br>
-      <button className="btn btn-primary" style={{fontSize:"20px" , width:"300px" }}  onClick={(e)=>submitForm(e)}> 
+      <button className="btn btn-primary" style={{fontSize:"20px" , width:"300px" }}  onClick={(e)=>submitForm(e)} id="livraison"> 
       <div style={{display:"flex", justifyContent:"start" ,alignItems:"center"}}>  <FontAwesomeIcon icon={faShoppingBasket} style={{marginRight:"10px"}} />    Paiement à la livraison </div>
       </button>
       <br></br>  

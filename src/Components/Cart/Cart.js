@@ -1,4 +1,4 @@
-import React,{useContext} from "react";
+import React,{useContext,useState} from "react";
 import NavBar from "../Navigation/NavBar";
 import Footer from "../Navigation/Footer";
 import HeroImage from "../Navigation/HeroImage";
@@ -11,6 +11,7 @@ import {GlobalCartContext} from '../../context/CartContext';
 
 export default function Cart() {
   const {myShoppingCart}=useContext(GlobalCartContext);
+  
   return (
     <div>
 
@@ -24,10 +25,10 @@ export default function Cart() {
       
       
       <div className="row">
-        <div className="col-lg-8  ">
+        <div className="col-lg-8  " id="mylist">
         <CartItems/>
         </div>
-        <div className="col-lg-4 ">
+        <div className="col-lg-4 " id="cart">
           {
             myShoppingCart.length>0 ? 
             <CartSummary  />

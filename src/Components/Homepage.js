@@ -1,7 +1,7 @@
 import React, { Suspense ,useEffect} from "react";
 import "../styles/Homepage.scss";
 import { useSelector,useDispatch } from "react-redux";
-
+import useHotjar from 'react-use-hotjar';
 
 import "bootstrap/dist/css/bootstrap.min.css";
 import loadingIcon from "../assets/images/dashboardloader3.gif";
@@ -18,7 +18,14 @@ export default function () {
   const user=useSelector(state=>state.authReducer.user)
 
    const dispatch = useDispatch()
+   const myCustomLogger = console.log;
+   const { initHotjar,identifyHotjar } = useHotjar();
+   useEffect(()=>{
 
+     initHotjar(2754261, 6, false, myCustomLogger);
+     identifyHotjar(localStorage.getItem('user')._id,  localStorage.getItem('user'), myCustomLogger);
+   },[initHotjar])
+   
    useEffect(()=>{
      dispatch(fetchPosts()).then(res => console.log(res))
    },[dispatch])

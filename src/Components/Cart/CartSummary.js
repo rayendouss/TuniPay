@@ -51,7 +51,7 @@ export default function CartSummary(props) {
         </div>
       </div>
       <div className="row">
-        <button className="btn-check-out">
+        <button className="btn-check-out" id="btnpay">
         <Link to="/delivery" className="btn btn-primary">
           <FontAwesomeIcon icon={faCreditCard} className="btn-check-out-icon" />
           CHECK OUT NOW
