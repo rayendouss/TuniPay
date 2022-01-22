@@ -1,3 +1,4 @@
+import axios from "axios"
 import postService from "../../services/postService"
 export const FETCH_POSTS = 'FETCH_POSTS'
 export const MY_POSTS = 'MY_POSTS'
@@ -40,6 +41,34 @@ export const post=(id)=> dispatch => {
           dispatch({type:POST, payload:data.post})
           return data
       })
+}
+export const commandedetail=(id)=>{
+    return axios.get('http://localhost:5000/commande/'+id,
+    {
+        headers: {
+            'Authorization':`tuniPay ${localStorage.getItem('token')}`
+          }  
+    }
+    )
+}
+
+export const userDetail=(id)=>{
+    return axios.get('http://localhost:5000/userId/'+id,
+    {
+        headers: {
+            'Authorization':`tuniPay ${localStorage.getItem('token')}`
+          }  
+    }
+    )
+}
+export const userPost=(id)=>{
+    return axios.get('http://localhost:5000/userpost/'+id,
+    {
+        headers: {
+            'Authorization':`tuniPay ${localStorage.getItem('token')}`
+          }  
+    }
+    )
 }
 
 export const AddCommande=(params)=> dispatch => {

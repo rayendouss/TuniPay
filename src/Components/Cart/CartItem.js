@@ -8,7 +8,7 @@ import introJs from 'intro.js';
 export default function CartItem(props) {
   const { addToast } = useToasts();
   let discount = 0
-  let product_name = props.data.title.replace(/ /g, "_");
+  let product_name = props.data.title
   const { removeItemFromCart, saveItemforLater } = useContext(
     GlobalCartContext
   );
