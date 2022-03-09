@@ -27,8 +27,8 @@ export default function () {
    },[initHotjar])
    
    useEffect(()=>{
-     dispatch(fetchPosts()).then(res => console.log(res))
-   },[dispatch])
+     fetchPosts().then(res => console.log(res))
+   },[])
     return (
     <div>
       <Suspense

@@ -8,8 +8,18 @@ import {
  faUser,
  
 } from "@fortawesome/free-solid-svg-icons";
+import Autocomplete from '@mui/material/Autocomplete';
+import Badge from '@mui/material/Badge';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import { makeStyles,withStyles } from "@material-ui/core/styles";
+import FormControl from '@mui/material/FormControl';
+import Select from '@mui/material/Select';
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+
 import axios from "axios";
-import use from "../../assets/images/use.svg"
+import TextField from '@mui/material/TextField';
+import InputLabel from '@mui/material/InputLabel';
 import Modal from "./Modal/Modal"
 import "../../styles/Navbar.scss";
 import { AddPost } from "../../store/actions/post";
@@ -22,7 +32,12 @@ import { logout } from "../../store/actions/auth";
 import { Steps, Hints } from 'intro.js-react';
 import 'intro.js/introjs.css';
 import introJs from 'intro.js';
+import FormLabel from '@material-ui/core/FormLabel';
 
+import Radio from '@material-ui/core/Radio';
+import RadioGroup from '@material-ui/core/RadioGroup';
+import {  useToasts } from 'react-toast-notifications';
+import {getMyAlert} from '../../store/actions/post'
  function NavBar({user}) {
   const { myShoppingCart } = useContext(GlobalCartContext);
   const [profileP, setProfileP] = useState(false);
@@ -37,19 +52,101 @@ import introJs from 'intro.js';
   const [password,setPassword]=useState('')
   const [address,setaddress]=useState('')
   const [stepsEnabled,setstepsEnabled]=useState(true)
+  const [tailleV,setTailleV] = useState()
+  const [marqueV,setmarqueV]=useState()
+  const [User,setUser]=useState(JSON.parse(localStorage.getItem('user')))
+  const styles =makeStyles ((theme) => ({
+    root: {
+      display: 'flex',
+    },
+    formControl: {
+      margin: theme.spacing.unit * 3,
+    },
+    group: {
+      margin: `${theme.spacing.unit}px 0`,
+    },
+  }));
+  const { classes } =styles()
+  const marque=[
+    { label: 'PALM ANGELS', year: 1994 },
+    { label: 'AIR JORDAN', year: 1994 },
+    { label: 'PRADA', year: 1994 },
+    { label: 'DIOR', year: 1994 },
+    { label: 'HERMES', year: 1994 },
+    { label: 'PULL AND BEAR JEANS', year: 1994 },
+    { label: 'NIKE', year: 1994 },
+    { label: 'CHANEL', year: 1994 },
+    { label: 'CONVERSE', year: 1994 },
+    { label: 'DSQUARED2', year: 1994 },
+    { label: 'OFF WHITE', year: 1994 },
+    { label: 'LE TEMPS DES CERISES', year: 1994 },
+    { label: 'LOUIS VUITTON', year: 1994 },
+    { label: 'CALVIN KLEIN', year: 1994 },
+    { label: 'TOMMY HILFIGER', year: 1994 },
+    { label: 'LACOSTE', year: 1994 },
+    { label: 'RALPH LAUREN', year: 1994 },
+    { label: 'THE NORTH FACE', year: 1994 },
+    { label: 'MONCLER', year: 1994 },
+    { label: 'VALENTINO', year: 1994 },
+    { label: 'BERSHKA', year: 1994 },
+    { label: 'MANGO', year: 1994 },
+    { label: 'HOLLISTER', year: 1994 },
+    { label: 'BURBERRY', year: 1994 },
+    { label: 'JACK & JONES', year: 1994 },
+    { label: 'STONE ISLAND', year: 1994 },
+    { label: 'ADIDAS', year: 1994 },
+    { label: 'PUMA', year: 1994 },
+    { label: 'ANTONY MORATO', year: 1994 },
+    { label: 'BENETTON', year: 1994 },
+    { label: 'C&A', year: 1994 },
+    { label: 'CELIO', year: 1994 },
+    { label: 'DIESEL', year: 1994 },
+    { label: 'EDEN PARK', year: 1994 },
+    { label: 'HAMADI ABID', year: 1994 },
+    { label: 'FRED PERRY', year: 1994 },
+    { label: 'G-STAR', year: 1994 },
+    { label: 'GANT', year: 1994 },
+    { label: 'GAP', year: 1994 },
+    { label: 'HACKETT', year: 1994 },
+    { label: 'H&M', year: 1994 },
+    { label: 'HUGO BOSS', year: 1994 },
+    { label: 'JULES', year: 1994 },
+    { label: 'LE COQ SPORTIF', year: 1994 },
+    { label: "LEVI'S", year: 1994 },
+    { label: 'NEW BALANCE', year: 1994 },
+    { label: 'REEBOOK', year: 1994 },
+    { label: 'REDSKINS', year: 1994 },
+    { label: 'SCOTHCH & SODA', year: 1994 },
+   ]
+   const taille=[
+    { label: 'XS', value: 'XS' },
+    { label: 'S', value: 'S' },
+    { label: 'M', value: 'M' },
+    { label: 'L', value: 'L' },
+    { label: 'XL', value: 'XL' },
+    { label: 'XXL', value: 'XXL' },
 
+   ]
+   const handleChangeT = (event) => {
+    console.log("taille",event.target.value)
+    setTailleV(event.target.value);
+  };
 const dispatch= useDispatch()
 let history = useHistory();
   function handleToggle(e) {
     e.preventDefault();
     setToggelNav(!toggleNav);
   }
- 
+
   const [title,settitle]=useState('')
   const [body,setbody]=useState('')
   const [price,setprice]=useState('')
   const [photo,setimage]=useState('')
   const [quantite,setqt]=useState('')
+  const [gender,setgender]=useState('')
+  const [numberalerte,setnumberalerte]=useState(0)
+const [myalerte,setmyalerte]=useState([])  
+  const { addToast } = useToasts();
   const submitForm=(e)=>{
       e.preventDefault()
       const data= new FormData()
@@ -65,11 +162,26 @@ let history = useHistory();
          setimage(data.url)
          console.log(photo)
        //  console.log(title,body,price,quantite,image)
-         dispatch(AddPost({title,body,price,quantite,photo})).then(history.push('/profile'))
+         dispatch(AddPost({title,body,price,quantite,photo,marqueV,tailleV,gender}))
         
        
       })
   }
+ const handleChangeg = event => {
+   console.log(event.target.value)
+    setgender( event.target.value );
+  };
+
+
+useEffect(()=>{
+    const user = JSON.parse(localStorage.getItem('user'))
+var ide=user._id
+    getMyAlert(ide).then(res=>
+      {
+        setnumberalerte(res.data.critere.length)
+        setmyalerte(res.data.critere)
+      })
+    },[])
 
   const submitFormPr=(e)=>{
     e.preventDefault() 
@@ -102,7 +214,11 @@ let history = useHistory();
               'Authorization':`tuniPay ${localStorage.getItem('token')}`
             }}
       ).then(res=>{
-        console.log(res)
+        if(res.status==200){
+          localStorage.setItem('user',JSON.stringify(res.data.user))
+          setProfileModalUp(false)
+          addToast("your profile is updated", { appearance: 'success', autoDismiss: true, })
+        }
       })
       
      
@@ -270,7 +386,7 @@ const intro =
               <li>
             
             
-               <img  style={{width:"40px", height:"40px", borderRadius: "5px" }} src={user.photo}/> 
+               <img  style={{width:"40px", height:"40px", borderRadius: "5px" }} src={User.photo}/> 
               
               
             
@@ -292,7 +408,11 @@ const intro =
                   <Link onClick={()=> setProfileModalUp(true)}>Update Profile</Link>
                   </li>
                   <li>
-                  <Link  onClick={()=> setProfileModal(true)}>Add Post</Link>
+                  <Link  onClick={()=> setProfileModal(true)}>Add post</Link>
+                  </li>
+                  <li>
+                  <Link>  Show Alert   <Badge badgeContent={numberalerte} color="error" style={{marginLeft:"10px"}} ></Badge> </Link> 
+             
                   </li>
                  
                 </ul>
@@ -329,18 +449,61 @@ const intro =
                         </Form.Group>
 
                         <Form.Group controlId="formBasicEmail" >
-                            <Form.Control onChange={e=>setbody(e.target.value)}
+                            <Form.Control placeholder="Enter Description" onChange={e=>setbody(e.target.value)}
                                       value={body} required/>
                         </Form.Group>
 
                         <Form.Group controlId="formBasicEmail" >
-                            <Form.Control onChange={e=>setprice(e.target.value)}
+                            <Form.Control placeholder="Enter price" onChange={e=>setprice(e.target.value)}
                                       value={price} required/>
                         </Form.Group>
                         <Form.Group controlId="formBasicEmail" >
-                            <Form.Control onChange={e=>setqt(e.target.value)}
+                            <Form.Control placeholder="Enter quantity" onChange={e=>setqt(e.target.value)}
                                       value={quantite} required/>
                         </Form.Group>
+                        <Card sx={{ width: 200,height:150,marginBottom:"10px" }} >
+                        <CardContent>
+                        <Form.Group component="fieldset" >
+          <FormLabel component="legend">Gender</FormLabel>
+          <RadioGroup
+            aria-label="Gender"
+            name="gender1"
+           
+            value={gender}
+            onChange={handleChangeg}
+          >
+            <FormControlLabel value="men" control={<Radio />} label="Femme" />
+            <FormControlLabel value="women" control={<Radio />} label="Homme" />
+            <FormControlLabel value="kids" control={<Radio />} label="Kids" />
+           
+          </RadioGroup>
+        </Form.Group>
+       </CardContent>
+        </Card>
+                        <Form.Group >
+      <Autocomplete
+      disablePortal
+      id="combo-box-demo"
+      options={marque}
+      sx={{ width: 200 }}
+      value={marqueV}
+      onChange={(event, value) => setmarqueV(value.label)}
+      renderInput={(params) => <TextField {...params} label="Marque" />}
+    />
+
+      </Form.Group>
+                        <Form.Group >
+      <Autocomplete
+      disablePortal
+      id="combo-box-demo"
+      options={taille}
+      sx={{ width: 200 }}
+ 
+      onChange={(event, value) => setTailleV(value.value)}
+      renderInput={(params) => <TextField {...params} label="Taille" />}
+    />
+      </Form.Group>
+      
                         <Form.Group  >
                             <input onChange={e=>setimage(e.target.files[0])} type="file" />
                         </Form.Group>

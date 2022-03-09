@@ -1,4 +1,4 @@
-import React , {useState,useContext,Fragment} from "react";
+import React , {useState,useContext,Fragment, useEffect} from "react";
 import NavBar from "./Navigation/NavBar";
 import Footer from "./Navigation/Footer";
 import HeroImage from "./Navigation/HeroImage";
@@ -7,6 +7,7 @@ import { post } from "../store/actions/post";
 import TopBanner from "./Navigation/TopBanner";
 import { connect } from "react-redux";
 import "../styles/ProductDetails.scss";
+import {sendMailpr} from "../store/actions/post"
 import Modal from './Modal/Modal'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -24,6 +25,7 @@ import ProductDetails from "./ProductDetails";
 import {  useToasts } from 'react-toast-notifications';
 import {
   
+  Link,
   useParams
 } from "react-router-dom";
  function Catalog({user,fetchPost}) {
@@ -38,16 +40,14 @@ import {
   let selectedProduct = "";
   const [ProductData,setProductData]=useState([])
   
-  fetchPost(id)
+  useEffect(()=>{
+    fetchPost(id)
+    .then(res=>{
+       setPostedBy(res.post.postedBy)
+        setProductData(res.post)
+    })
+  },[])
  
-  .then(res=>{
- 
-    
-     console.log('a',res.post)
-     setPostedBy(res.post.postedBy)
-      setProductData(res.post)
-   
-  })
  
   let discount =0
   let brand="not now"
@@ -66,9 +66,16 @@ import {
      stockLevelMessage = `Out of  stock`;
    }
    function sendMail(data) {
-     setdisplaySocialInputs(false)
-     addToast("mail envoyé à "+data,{appearance:"success"})
-     console.log(data)
+     
+     sendMailpr(id,data).then(res=>{
+       console.log('res',res)
+       if(res.status=200){
+        setdisplaySocialInputs(false)
+        addToast("mail envoyé à "+data,{appearance:"success"})
+       }
+     })
+    
+  
    }
 
    const {addItemTocart}= useContext(GlobalCartContext)
@@ -197,22 +204,26 @@ function handleChangeSize(event) {
                 icon={faPlaneDeparture}
                 className="product-details-services-icons"
               />
+              
                 <h2>User Posted By:</h2>
          
           <div className="container ">
           <div class="content_card">
           <div class="avatar_holder">
+          <Link to={`/userprofile/${postedBy._id}`}>
             <img
               class="avatar"
               alt={postedBy.photo}
               src={postedBy.photo}
             />
             <h1>  Name   : </h1><h6>{postedBy.name} {postedBy.lastname}</h6>
+            </Link>
           </div>
         </div>
         
         
           </div>
+          
               <h4>SHIPS WITHIN HOURS</h4>
             </div>
             <div className="col-lg-4">

@@ -9,12 +9,34 @@ export const ADD_COMMANDE = 'ADD_COMMANDE'
 export const MY_COMMANDE = 'MY_COMMANDE'
 export const DELETE_POST = 'DELETE_POST'
 
-export const fetchPosts=()=> dispatch => {
-    return postService.fetchPost()
-      .then(data => {
-          dispatch({type:FETCH_POSTS, payload:data.posts})
-          return data
-      })
+export const fetchPosts=(typepr) => {
+    console.log('action',typepr)
+       return axios.get(`http://localhost:5000/allposts/${typepr}` ,
+    {
+        headers: {
+            'Authorization':`tuniPay ${localStorage.getItem('token')}`
+          }  
+    })
+   
+}
+
+export const sendMailpr=(id,email)=>{
+    return axios.post(`http://localhost:5000/sendMail/${id}`,{email:email})
+}
+
+export const getMyAlert=(id)=>{
+    return axios.get(`http://localhost:5000/getmycritere/${id}`)
+}
+
+export const recherchePost=(body) => {
+    console.log("je",body)
+    return axios.post('http://localhost:5000/recherche',body)
+    //.then(data=>{})
+}
+export const notifPosts=(body) => {
+    console.log("je",body)
+    return axios.post('http://localhost:5000/notifposts',body)
+    //.then(data=>{})
 }
 
 export const myPosts=()=> dispatch => { 
@@ -60,6 +82,17 @@ export const userDetail=(id)=>{
           }  
     }
     )
+}
+export const list_vues=(id)=>{
+    const userid=JSON.parse(localStorage.getItem('user'))
+    console.log(userid._id)
+   axios.post('http://localhost:5000/addVue/'+id,
+   {
+       "_id":userid._id
+   }
+    ).then(res=>{
+        console.log("res",res)
+    })
 }
 export const userPost=(id)=>{
     return axios.get('http://localhost:5000/userpost/'+id,

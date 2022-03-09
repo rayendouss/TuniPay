@@ -1,4 +1,4 @@
-import React, { useContext,useState } from "react";
+import React, { useContext,useEffect,useState } from "react";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
@@ -11,16 +11,14 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Link } from "react-router-dom";
 import { GlobalCartContext } from "../context/CartContext";
 import { useToasts } from "react-toast-notifications";
- function PopularProducts({user,fetchPosts}) {
+ function PopularProducts({}) {
      
   const [PopularProductData,setPopularProductData]=useState([])
-  fetchPosts()
- 
-  .then(res=>{
-   
-      setPopularProductData(res.posts)
-  
+  useEffect(()=>{
+  fetchPosts().then(res=>{  
+      setPopularProductData(res.data.posts)
   })
+},[])
   const { addToast } = useToasts();
   const { addItemTocart } = useContext(GlobalCartContext);
 
@@ -135,9 +133,7 @@ const mapStateToProps =(state) =>{
   }
 }
 const mapDispatchToProps=dispatch=> {
-  return {
-    fetchPosts:()=>dispatch(fetchPosts())
-  }
+
 }
 
 export default connect(mapStateToProps,mapDispatchToProps) (PopularProducts);

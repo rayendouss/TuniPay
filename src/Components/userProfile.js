@@ -16,11 +16,11 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faShoppingBasket, faEye,faStore,faFolder, faFolderOpen, faFolderPlus,faTrash } from "@fortawesome/free-solid-svg-icons";
 import { Steps, Hints } from 'intro.js-react';
 import 'intro.js/introjs.css';
-
+import "./ProfileCard.css"
 import introJs from 'intro.js';
 import HeroImage from "../Components/Navigation/HeroImage";
 import { Container } from "react-bootstrap";
-import {userPost} from "../store/actions/post"
+import {userPost,userDetail,list_vues} from "../store/actions/post"
 const TopBanner = React.lazy(() => import("./Navigation/TopBanner"));
 const HeroText = React.lazy(() => import("./Navigation/HeroText"));
 const NavBar = React.lazy(() => import("./Navigation/NavBar"));
@@ -32,7 +32,8 @@ const UserProfile=({user,myCmd,myPost,deletep}) => {
   const [commandes,setCommandes]=useState(false)
     const [PopularProductData,setPopularProductData]=useState([])
     const [MyCommandes,setMyCommandes]=useState([])
-    
+    const [profileD,setProfileD]=useState()
+    const[vues,setVues]=useState([])
     const onExit=()=>{
       setstepsEnabled(false)
      
@@ -54,8 +55,19 @@ const UserProfile=({user,myCmd,myPost,deletep}) => {
 ]}
 const {id,action} =useParams();
 useEffect(()=>{
-console.log("id",id)
+  list_vues(id)
+  userDetail(id).then((res)=>{
+    
+    setVues(res.data.list_vues)
+    setProfileD(res.data)
+  }
+
+  )
+
+ 
+
 },[])
+
   
   
   useEffect(()=>{
@@ -175,13 +187,54 @@ console.log("id",id)
          onExit={()=>onExit()}
 
       />
+      <div>
+{ profileD && 
+<div style={{
+            display:"flex",
+            justifyContentContent: "space-around",
+            margin:"50px 30px",
+            borderBottom:"1px solid grey"
+        }}>
+          
+        
+            <div>
+                <img style={{width:"160px" ,height:"160px",borderRadius:"80px"}}
+                src={profileD?profileD.photo:"loading"}
+                />
+    
+    <div className="file-field input-field">
+    
+      <div className="file-path-wrapper">
+        <input className="file-path validate" type="text"/>
+      </div>
+    </div>
+
+
+            </div>
+            <div style={{margin:"0px 100px"}}>
+              <h4>{profileD.name} {profileD.lastname}</h4>  
+              <div style={{
+            display:"flex",
+            justifyContentContent: "space-between",
+            width:"300%",
+          whiteSpace:"pre"
+        }}>
+            <h6>{MyCommandes.length} Posts    </h6>
+            <h6>{vues.length} Vues    </h6>
+       
+
+              </div>
+            </div>
+        </div>
+        
+        } </div>
          <div class="rightside">
        <Grid container spacing={2}>
       {
             
      MyCommandes.map((item)=>{
         return(
-            <div className="container">
+            <div className="row">
       
     
               <div class="video_card">
@@ -190,20 +243,16 @@ console.log("id",id)
       </div>
       <div class="card-body">
 
-        <div class="author">
+        <div className="container" style={{top:"50px"}}>
           
-        Title :{item.title}
+        <div> <h5> Title :</h5> <p>{item.title}</p></div>
           
-         Description : {item.body} 
-         Prix : {item.price} 
-         Quantite : {item.quantite}
+        <div>  <h5>  Description :</h5><p>  {item.body}</p> </div>
+        <div> <h5>  Prix : </h5><p> {item.price} DT </p> </div>
+        <div> <h5>  Quantite :</h5> <p> {item.quantite}</p></div>
         </div>
-    <div style={{marginLeft:"280px"}}>    <span className="card-product-cart-icon" >
-                 
-                 <FontAwesomeIcon icon={faTrash} />
-                
-             </span> </div>
-             <div >  
+   
+             <div style={{marginLeft: "150px"}}>  
              <Link
                     className="card-product-cart-icon"
                     to={`commande/item/${item._id}`}
