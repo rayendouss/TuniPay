@@ -6,8 +6,12 @@ import {
   faTimes,
   faSignOutAlt,
  faUser,
- 
+ faTrash
 } from "@fortawesome/free-solid-svg-icons";
+import  Typography  from "@mui/material/Typography";
+import { styled } from '@mui/material/styles';
+import Box from '@mui/material/Box';
+import Paper from '@mui/material/Paper';
 import Autocomplete from '@mui/material/Autocomplete';
 import Badge from '@mui/material/Badge';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
@@ -16,11 +20,11 @@ import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
-
+import Modal from '@mui/material/Modal';
 import axios from "axios";
 import TextField from '@mui/material/TextField';
 import InputLabel from '@mui/material/InputLabel';
-import Modal from "./Modal/Modal"
+import Modal2 from "./Modal/Modal"
 import "../../styles/Navbar.scss";
 import { AddPost } from "../../store/actions/post";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -33,11 +37,12 @@ import { Steps, Hints } from 'intro.js-react';
 import 'intro.js/introjs.css';
 import introJs from 'intro.js';
 import FormLabel from '@material-ui/core/FormLabel';
-
+import Grid from '@mui/material/Grid';
 import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
 import {  useToasts } from 'react-toast-notifications';
-import {getMyAlert} from '../../store/actions/post'
+import {getMyAlert,DeleteAlerte} from '../../store/actions/post'
+import {getmyvues} from '../../store/actions/auth'
  function NavBar({user}) {
   const { myShoppingCart } = useContext(GlobalCartContext);
   const [profileP, setProfileP] = useState(false);
@@ -46,6 +51,7 @@ import {getMyAlert} from '../../store/actions/post'
   const [showModalUp,setProfileModalUp]= useState(false)
   const [photoPr,setimagePr]=useState('')
   const [email,setEmail]=useState('') 
+  const  [open,setOpen]=useState(false)
   const [lastn,setLastN]=useState('') 
     const [name,setName]=useState('')
     const [dateB,setDateB]=useState('')
@@ -55,6 +61,15 @@ import {getMyAlert} from '../../store/actions/post'
   const [tailleV,setTailleV] = useState()
   const [marqueV,setmarqueV]=useState()
   const [User,setUser]=useState(JSON.parse(localStorage.getItem('user')))
+
+
+const Item = styled(Paper)(({ theme }) => ({
+  backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
+  ...theme.typography.body2,
+  padding: theme.spacing(1),
+  textAlign: 'center',
+  color: theme.palette.text.secondary,
+}));
   const styles =makeStyles ((theme) => ({
     root: {
       display: 'flex',
@@ -127,6 +142,17 @@ import {getMyAlert} from '../../store/actions/post'
     { label: 'XXL', value: 'XXL' },
 
    ]
+   const style = {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: 400,
+    bgcolor: 'background.paper',
+    borderRadius: "10px",
+    boxShadow: 24,
+    p: 4,
+  };
    const handleChangeT = (event) => {
     console.log("taille",event.target.value)
     setTailleV(event.target.value);
@@ -145,6 +171,7 @@ let history = useHistory();
   const [quantite,setqt]=useState('')
   const [gender,setgender]=useState('')
   const [numberalerte,setnumberalerte]=useState(0)
+  const [myvues,setmyvues]=useState(0)
 const [myalerte,setmyalerte]=useState([])  
   const { addToast } = useToasts();
   const submitForm=(e)=>{
@@ -163,6 +190,7 @@ const [myalerte,setmyalerte]=useState([])
          console.log(photo)
        //  console.log(title,body,price,quantite,image)
          dispatch(AddPost({title,body,price,quantite,photo,marqueV,tailleV,gender}))
+        //window.location.href = "http://localhost:3000/profile"
         
        
       })
@@ -172,7 +200,9 @@ const [myalerte,setmyalerte]=useState([])
     setgender( event.target.value );
   };
 
+useEffect(()=>{
 
+},[myalerte])
 useEffect(()=>{
     const user = JSON.parse(localStorage.getItem('user'))
 var ide=user._id
@@ -180,6 +210,11 @@ var ide=user._id
       {
         setnumberalerte(res.data.critere.length)
         setmyalerte(res.data.critere)
+      })
+
+      getmyvues(ide).then(res=>{
+           console.log('ide',res.data)
+           setmyvues(res.data.length)
       })
     },[])
 
@@ -227,13 +262,14 @@ var ide=user._id
 const submitlogout=(e)=>{
   e.preventDefault()
   dispatch(logout())
+  localStorage.clear()
     history.push('/')
   
   
 }
 const onExit=()=>{
   setstepsEnabled(false)
-  localStorage.setItem('userguide',"true")
+  localStorage.setItem('userguidenavbar',"true")
 }
 const intro = 
 {
@@ -279,14 +315,59 @@ const intro =
   }
 ]}
 
+const handleClose = () => setOpen(false);
 
+function deletealert(id){
+  // deletep(id).then((res)=>{
+  //   addToast(" successfully deleted", { appearance: 'success', autoDismiss: true, })
+  // })
+  DeleteAlerte(id).then((res)=>{
+    setnumberalerte(res.data.critere.length)
+    setmyalerte(res.data.critere)
+    addToast(" successfully deleted", { appearance: 'success', autoDismiss: true, })
+  })
 
+   }
 
   return (
     <div>
+
       <header>
+
+      <Modal
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+         <div >
+           
+         <Box sx={style}>
+         <Typography sx={{ fontSize: 20 ,marginLeft:"40px",fontWeight:"bold",marginBottom:"20px"}} >
+      Critère de recherche
+        </Typography>
+
+    <Grid container spacing={2} >
+    {myalerte.map((i)=>{
+   return(
+    <Grid item xs={6} style={{marginBottom:"10px"}}>
+      <Card>
+    <Grid>Marque :{i.marque}</Grid>
+    <Grid>Taille :{i.taille}</Grid>
+    <Grid>Price :{i.price}</Grid>
+    <Grid style={{marginBottom:"10px"}}>Quantite :{i.quantite}</Grid>
+    <span className="card-product-cart-icon" onClick={()=>deletealert(i._id)} >  <FontAwesomeIcon icon={faTrash}/> </span> </Card>
+   </Grid>
+   )
+
+ })
+}
+  
+</Grid>
+</Box> </div>
+        </Modal>
        
-       {localStorage.getItem('userguide')=="false" ? <Steps 
+       {(localStorage.getItem('userguidenavbar')=="false" || localStorage.getItem('userguidenavbar')==undefined) ? <Steps 
          enabled={intro.stepsEnabled}
          steps={intro.steps}
          initialStep={intro.initialStep}
@@ -411,9 +492,17 @@ const intro =
                   <Link  onClick={()=> setProfileModal(true)}>Add post</Link>
                   </li>
                   <li>
-                  <Link>  Show Alert   <Badge badgeContent={numberalerte} color="error" style={{marginLeft:"10px"}} ></Badge> </Link> 
+                  <Link onClick={()=> setOpen(true)} >  Show Alert   <Badge badgeContent={numberalerte} color="error" style={{marginLeft:"10px"}} ></Badge> </Link> 
              
                   </li>
+                  {
+                    myvues>0 && (
+                      <li>
+                      <Link  >  number of views  <Badge badgeContent={myvues} color="error" style={{marginLeft:"10px"}} ></Badge> </Link> 
+                 
+                      </li>
+                    )
+                  }
                  
                 </ul>
            
@@ -437,7 +526,7 @@ const intro =
             
             </ul>
             { showModal &&
-               <Modal click={()=> setProfileModal(false)}>
+               <Modal2 click={()=> setProfileModal(false)}>
                    <Fragment key="header">
                      Add Post
                    </Fragment >
@@ -516,12 +605,12 @@ const intro =
                    <Fragment key="footer">
                      
                    </Fragment>
-               </Modal>
+               </Modal2>
             }
 
 
           { showModalUp &&
-               <Modal click={()=> setProfileModalUp(false)}>
+               <Modal2 click={()=> setProfileModalUp(false)}>
                    <Fragment key="header">
                      Update Profile
                    </Fragment >
@@ -562,11 +651,12 @@ const intro =
                    <Fragment key="footer">
                      
                    </Fragment>
-               </Modal>
+               </Modal2>
             }
           </nav>
         </div>
       </header>
+    
     </div>
   );
 }

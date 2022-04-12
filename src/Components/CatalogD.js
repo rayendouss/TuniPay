@@ -36,7 +36,7 @@ import {
   const {id,action} =useParams();
   const { addToast } = useToasts();
   const [postedBy,setPostedBy]=useState(1)
-  const [prod_selected_size,setProd_prod_selected_size]=useState("")
+  const [prod_selected_size,setProd_prod_selected_size]=useState()
   let selectedProduct = "";
   const [ProductData,setProductData]=useState([])
   
@@ -46,6 +46,7 @@ import {
        setPostedBy(res.post.postedBy)
         setProductData(res.post)
         setProd_prod_selected_size(res.post.taille)
+      
     })
   },[])
  
@@ -178,6 +179,7 @@ function handleChangeSize(event) {
           <h3>Type: {ProductData.type}</h3>
          
           <h3>Size: {prod_selected_size}</h3>
+        
           {/* <div className="mb-4 mt-4">{product_size}</div> */}
           <h3>QTY:{ProductData.quantite}</h3>
           <div className="def-number-input number-input">

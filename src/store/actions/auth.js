@@ -1,5 +1,6 @@
 
 import AuthService from "../../services/authService";
+import axios from "axios"
 export const REGISTER="REGISTER" ;
 export const USER_GUIDE="USER_GUIDE"
 export const LOGIN="LOGIN" ;
@@ -14,7 +15,9 @@ export const login= (params) => dispatch =>{
     })
      
 }
-
+export const getmyvues=(id)=>{
+  return axios.get(`http://localhost:5000/listVue/${id}`)
+}
 export const register = (params) => dispatch => {
   return AuthService.register(params)
   .then(data=>

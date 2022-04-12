@@ -9,6 +9,10 @@ export const ADD_COMMANDE = 'ADD_COMMANDE'
 export const MY_COMMANDE = 'MY_COMMANDE'
 export const DELETE_POST = 'DELETE_POST'
 
+export const DeleteAlerte=(id)=>{
+    return axios.delete(`http://localhost:5000/deletecritere/${id}`)
+}
+
 export const fetchPosts=(typepr) => {
     console.log('action',typepr)
        return axios.get(`http://localhost:5000/allposts/${typepr}` ,

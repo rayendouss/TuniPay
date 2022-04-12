@@ -139,12 +139,12 @@ const Maps=()=> {
       let quantite=element.count
       sum=sum+(Number(element.price)*quantite)
      
-      axios.post("https://test.clictopay.com/payment/rest/register.do?userName=esprittest-api&password=89Lgnx9UE&orderNumber=34421910&amount="+sum*100+"&returnUrl=http://localhost:3000/delivery").then
+      axios.post("https://test.clictopay.com/payment/rest/register.do?userName=esprittest-api&password=89Lgnx9UE&orderNumber=120645&amount="+sum*100+"&returnUrl=http://localhost:3000/delivery").then
       ((result)=>{
 
         console.log(sum)
         console.log(result)
-        //dispatch(AddCommande({listCommande:element,paiement,quantite,address}))
+        dispatch(AddCommande({listCommande:element,paiement,quantite,address}))
        window.location.href = result.data.formUrl
       })
      

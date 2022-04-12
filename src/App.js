@@ -17,6 +17,7 @@ const Homepage = lazy(() => import("./Components/Homepage"));
 const Shopping = lazy(() => import("./Components/Shopping"));
 const Cart = lazy(() => import("./Components/Cart/Cart"));
 const Catalog = lazy(() => import("./Components/Catalog"));
+const CatalogD = lazy(() => import("./Components/CatalogD"));
 const Delivery = lazy(()=>import("./Components/Delivery/Delivery"))
 
 
@@ -57,6 +58,11 @@ function App() {
                 exact
                 path="/catalog/item/:id/:productname/:action"
                 component={Catalog}
+              />
+                <Route
+                exact
+                path="/catalog/:id/:productname/:action"
+                component={CatalogD}
               />
               
               <Route

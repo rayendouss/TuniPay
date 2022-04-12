@@ -82,11 +82,13 @@ const Profile=({user,myCmd,myPost,deletep}) => {
       setCommandes(true)
      
     }
-    myPost()  
+   useEffect(()=>{
+      myPost()  
     .then(res=>{
 
         setPopularProductData(res.mypost)
     })
+  },[])
       
 
     const data = PopularProductData.map((product) => {
