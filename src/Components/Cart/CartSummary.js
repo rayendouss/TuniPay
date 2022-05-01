@@ -35,6 +35,7 @@ export default function CartSummary(props) {
    
 
 
+
       
       <div className="row">
         <div className="col-lg-6">
